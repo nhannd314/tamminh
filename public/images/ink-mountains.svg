@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" width="600" height="360" fill="none">
+  <defs>
+    <linearGradient id="mtnFar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C89544" stop-opacity="0.18"/><stop offset="1" stop-color="#C89544" stop-opacity="0.06"/></linearGradient>
+    <linearGradient id="mtnMid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#946821" stop-opacity="0.28"/><stop offset="1" stop-color="#946821" stop-opacity="0.10"/></linearGradient>
+    <linearGradient id="mtnNear" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6E4D17" stop-opacity="0.42"/><stop offset="1" stop-color="#6E4D17" stop-opacity="0.18"/></linearGradient>
+  </defs>
+  <circle cx="430" cy="180" r="78" stroke="#C89544" stroke-width="1.4" stroke-dasharray="2 4" fill="none" opacity="0.55"/>
+  <circle cx="430" cy="180" r="56" fill="#FBF4E5" opacity="0.85"/>
+  <path d="M0 240 L60 200 L120 215 L180 175 L240 210 L300 185 L360 225 L420 195 L500 220 L600 200 L600 360 L0 360 Z" fill="url(#mtnFar)"/>
+  <path d="M0 270 L40 245 L90 260 L150 220 L210 250 L280 235 L340 260 L400 230 L470 255 L540 235 L600 250 L600 360 L0 360 Z" fill="url(#mtnMid)"/>
+  <path d="M0 300 L70 275 L140 290 L210 260 L290 285 L360 270 L440 295 L510 280 L600 295 L600 360 L0 360 Z" fill="url(#mtnNear)"/>
+  <g transform="translate(255,250)" stroke="#6E4D17" stroke-width="1.2" fill="none" opacity="0.65">
+    <path d="M-22 -2 Q0 -18 22 -2"/><path d="M-18 -2 L-18 16"/><path d="M18 -2 L18 16"/><path d="M-26 0 L26 0"/><path d="M-14 16 L14 16"/><path d="M0 -18 L0 -28"/>
+    <circle cx="0" cy="-28" r="1.4" fill="#C89544" stroke="none"/>
+  </g>
+  <g stroke="#6E4D17" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.55">
+    <path d="M180 130 q6 -6 12 0 q6 -6 12 0"/><path d="M340 110 q5 -5 10 0 q5 -5 10 0"/>
+  </g>
+</svg>

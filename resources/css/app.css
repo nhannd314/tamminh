@@ -1,0 +1,512 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/*
+|--------------------------------------------------------------------------
+| Tâm Minh — Design tokens
+|--------------------------------------------------------------------------
+| Light theme, phong cách Á Đông: đồng (copper) làm màu nhấn chính,
+| xanh navy làm màu thương hiệu phụ, nền kem ấm, chữ màu mực.
+*/
+@theme static {
+    /* Typography */
+    --font-serif: 'Lora', 'Source Serif Pro', Georgia, serif;
+    --font-sans: 'Manrope', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --text-5xl--line-height: 1.15;
+    --text-6xl--line-height: 1.1;
+
+    --tracking-eyebrow: 0.14em;
+
+    /* Copper — primary accent */
+    --color-copper-50: #fbf4e5;
+    --color-copper-100: #f4e2bc;
+    --color-copper-200: #e9c886;
+    --color-copper-300: #daa85a;
+    --color-copper-400: #c89544;
+    --color-copper-500: #b6822f;
+    --color-copper-600: #946821;
+    --color-copper-700: #6e4d17;
+
+    /* Navy — secondary brand */
+    --color-navy-50: #eaeef5;
+    --color-navy-100: #c5cfe0;
+    --color-navy-200: #8898ba;
+    --color-navy-300: #4d6592;
+    --color-navy-400: #25446f;
+    --color-navy-500: #15325e;
+    --color-navy-600: #112a4f;
+    --color-navy-700: #0b1e3c;
+
+    /* Cream — surfaces & hairlines */
+    --color-cream-50: #fdfbf6;
+    --color-cream-100: #faf6ec;
+    --color-cream-200: #f2ebd8;
+    --color-cream-300: #e8dcc0;
+    --color-cream-400: #c9b68c;
+
+    /* Ink — text */
+    --color-ink-100: #dcd6ca;
+    --color-ink-200: #b6aea0;
+    --color-ink-300: #847c70;
+    --color-ink-400: #565049;
+    --color-ink-500: #2c2924;
+    --color-ink-600: #1a1814;
+
+    /* Status (muted, warm) */
+    --color-success: #4f8a5b;
+    --color-warning: #c88a1e;
+    --color-danger: #b3473a;
+    --color-info: #25446f;
+
+    /* Layout */
+    --container-content: 1320px;
+
+    /* Elevation — very soft, warm shadows */
+    --shadow-soft-sm: 0 2px 6px rgb(70 50 20 / 0.06);
+    --shadow-soft-md: 0 8px 24px rgb(70 50 20 / 0.08);
+    --shadow-soft-lg: 0 20px 48px rgb(70 50 20 / 0.1);
+
+    /* Motion */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --animate-fade-up: fade-up 0.9s var(--ease-out-expo) both;
+    --animate-spin-slow: spin 28s linear infinite;
+    --animate-float: float 5.5s ease-in-out infinite;
+
+    @keyframes fade-up {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-7px);
+        }
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Base
+|--------------------------------------------------------------------------
+*/
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-cream-100 font-sans text-ink-500 antialiased;
+        -webkit-tap-highlight-color: transparent;
+        text-size-adjust: 100%;
+    }
+
+    ::selection {
+        @apply bg-copper-100 text-ink-600;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Components
+|--------------------------------------------------------------------------
+| Mỗi class `tm-*` tương ứng một Blade component trong
+| resources/views/components/ui. Ưu tiên dùng component thay vì class trực tiếp.
+*/
+@layer components {
+    /* ── Layout ─────────────────────────────────────────────── */
+    .tm-container {
+        @apply mx-auto w-full max-w-content px-[max(1rem,env(safe-area-inset-left))] sm:px-6;
+    }
+
+    /* ── Typography ─────────────────────────────────────────── */
+    .tm-display {
+        @apply font-serif text-[1.75rem] leading-[1.25] font-semibold tracking-[-0.01em] text-balance text-ink-600 uppercase min-[400px]:text-3xl sm:text-4xl lg:text-5xl;
+    }
+
+    .tm-heading {
+        @apply font-serif text-[1.75rem] leading-[1.25] font-semibold tracking-[-0.02em] text-balance text-ink-600 min-[400px]:text-3xl sm:text-4xl lg:text-5xl;
+    }
+
+    .tm-accent {
+        @apply font-medium text-copper-600 italic;
+    }
+
+    .tm-lead {
+        @apply text-sm leading-relaxed text-ink-500 sm:text-base;
+    }
+
+    .tm-rule {
+        @apply block h-0.5 w-14 bg-copper-400;
+    }
+
+    .tm-eyebrow {
+        @apply inline-flex items-center gap-1.5 rounded-full border border-copper-200 bg-copper-50 px-4 py-2 font-sans text-sm font-semibold tracking-eyebrow text-copper-700 uppercase;
+    }
+
+    .tm-overline {
+        @apply font-sans text-xs font-bold tracking-eyebrow uppercase;
+    }
+
+    /* ── Surfaces ───────────────────────────────────────────── */
+    .tm-card {
+        @apply relative flex flex-col gap-3.5 rounded-xl border border-cream-300 bg-white p-7 shadow-soft-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-copper-200 hover:shadow-soft-md;
+    }
+
+    .tm-card-num {
+        @apply absolute top-5 right-6 font-serif text-3xl tracking-[0.2em] text-copper-400;
+    }
+
+    .tm-card-title {
+        @apply font-serif text-xl leading-tight font-semibold text-ink-600 sm:text-2xl;
+    }
+
+    .tm-card-desc {
+        @apply text-base leading-relaxed text-ink-300;
+    }
+
+    .tm-panel {
+        @apply rounded-xl border border-cream-300 bg-white p-7 shadow-soft-sm;
+    }
+
+    .tm-form {
+        @apply rounded-[10px] border border-cream-300 bg-white p-6 shadow-soft-md sm:p-8;
+    }
+
+    .tm-form-header {
+        @apply mb-5 border-b border-cream-300 pb-[18px] font-sans text-sm font-semibold tracking-eyebrow text-ink-600 uppercase;
+    }
+
+    .tm-callout {
+        @apply flex items-start gap-3 rounded-lg border border-copper-200 bg-copper-50 px-4 py-3.5;
+    }
+
+    .tm-quote {
+        @apply rounded-r-md border-l-2 border-copper-400 bg-copper-50 p-4 font-serif text-base leading-relaxed text-ink-600 italic;
+    }
+
+    /* ── Form controls ──────────────────────────────────────── */
+    .tm-field {
+        @apply flex flex-col gap-1.5;
+    }
+
+    .tm-label {
+        @apply text-sm font-medium text-ink-500;
+    }
+
+    .tm-input {
+        @apply w-full rounded-md border border-cream-300 bg-white px-3.5 py-3 text-base text-ink-600 transition outline-none placeholder:text-ink-200 sm:text-sm focus:border-copper-400 focus:ring-2 focus:ring-copper-400/20 aria-invalid:border-danger;
+    }
+
+    .tm-select {
+        @apply w-full cursor-pointer appearance-none rounded-md border border-cream-300 bg-white px-3.5 py-3 text-base text-ink-600 transition outline-none focus:border-copper-400 focus:ring-2 focus:ring-copper-400/20 sm:text-sm bg-[url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='14'%20height='14'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23847C70'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M6%209l6%206%206-6'/%3E%3C/svg%3E")] bg-[position:right_10px_center] bg-no-repeat pl-3 pr-7 sm:bg-[position:right_12px_center] sm:px-3.5 sm:pr-8;
+    }
+
+    .tm-error {
+        @apply text-xs text-danger;
+    }
+
+    /* Custom radio — dot + label, the native input stays accessible */
+    .tm-radio {
+        @apply inline-flex cursor-pointer items-center gap-2.5 px-1 py-1.5 text-sm leading-none text-ink-400 transition-colors select-none has-checked:font-semibold has-checked:text-copper-700;
+    }
+
+    /*
+     * Ring (inset shadow) and dot (centered radial gradient) are painted on the
+     * same box, so the dot stays centered at any device pixel ratio.
+     */
+    .tm-radio-dot {
+        --tm-radio-ring: var(--color-cream-400);
+        --tm-radio-dot-size: 0px;
+
+        @apply size-[18px] shrink-0 rounded-full;
+        box-shadow: inset 0 0 0 1.5px var(--tm-radio-ring);
+        background: radial-gradient(circle closest-side, var(--color-copper-500) calc(100% - 0.75px), transparent 100%) center / var(--tm-radio-dot-size) var(--tm-radio-dot-size) no-repeat;
+        transition:
+            box-shadow 0.18s,
+            background-size 0.18s var(--ease-out-expo);
+    }
+
+    :is(.tm-radio, .tm-radio-card):hover .tm-radio-dot {
+        --tm-radio-ring: var(--color-copper-300);
+    }
+
+    :is(.tm-radio, .tm-radio-card):has(input:checked) .tm-radio-dot {
+        --tm-radio-ring: var(--color-copper-500);
+        --tm-radio-dot-size: 10px;
+    }
+
+    :is(.tm-radio, .tm-radio-card):has(input:focus-visible) .tm-radio-dot {
+        @apply outline-2 outline-offset-2 outline-copper-300;
+    }
+
+    .tm-checkbox {
+        @apply flex cursor-pointer items-start gap-2.5 py-1 text-[13px] leading-snug text-ink-400 select-none;
+    }
+
+    .tm-checkbox-box {
+        @apply mt-px size-[18px] shrink-0 rounded-[5px] bg-white bg-center bg-no-repeat bg-size-[12px] transition;
+        box-shadow: inset 0 0 0 1.5px var(--color-cream-400);
+    }
+
+    .tm-checkbox:hover .tm-checkbox-box {
+        box-shadow: inset 0 0 0 1.5px var(--color-copper-300);
+    }
+
+    .tm-checkbox:has(input:checked) .tm-checkbox-box {
+        @apply bg-copper-500 bg-[url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='white'%20stroke-width='3.5'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M5%2012.5l4.5%204.5L19%207'/%3E%3C/svg%3E")];
+        box-shadow: inset 0 0 0 1.5px var(--color-copper-500);
+    }
+
+    .tm-checkbox:has(input:focus-visible) .tm-checkbox-box {
+        @apply outline-2 outline-offset-2 outline-copper-300;
+    }
+
+    .tm-radio-card {
+        @apply relative flex cursor-pointer items-start gap-3 rounded-md border border-cream-300 bg-cream-50 px-4 py-3.5 transition hover:border-copper-300 has-checked:border-copper-400 has-checked:bg-copper-50;
+    }
+
+    .tm-dropzone {
+        @apply block cursor-pointer rounded-lg border-[1.5px] border-dashed border-cream-400 bg-cream-50 p-6 text-center text-sm text-ink-300 transition hover:border-copper-400 hover:bg-copper-50;
+    }
+
+    /* ── Buttons ────────────────────────────────────────────── */
+    .tm-btn {
+        @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-sans text-sm font-semibold transition-all duration-200 select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper-300 disabled:pointer-events-none disabled:opacity-50;
+    }
+
+    .tm-btn-sm {
+        @apply px-3.5 py-2;
+    }
+
+    .tm-btn-md {
+        @apply px-5 py-3;
+    }
+
+    .tm-btn-lg {
+        @apply px-7 py-4;
+    }
+
+    .tm-btn-icon {
+        @apply size-[38px] rounded-full p-0;
+    }
+
+    .tm-btn-primary {
+        @apply bg-copper-400 text-white shadow-soft-sm hover:bg-copper-500 active:scale-[0.97];
+    }
+
+    .tm-btn-secondary {
+        @apply bg-navy-500 text-cream-50 shadow-soft-sm hover:bg-navy-600 active:scale-[0.97];
+    }
+
+    .tm-btn-outline {
+        @apply border border-copper-300 bg-transparent text-copper-700 hover:border-copper-400 hover:bg-copper-400 hover:text-white;
+    }
+
+    .tm-btn-ghost {
+        @apply bg-transparent text-ink-400 hover:bg-cream-200;
+    }
+
+    .tm-btn-soft {
+        @apply bg-cream-200 text-ink-500 hover:bg-cream-300;
+    }
+
+    /* ── Atoms ──────────────────────────────────────────────── */
+    .tm-icon-ring {
+        @apply flex shrink-0 items-center justify-center rounded-full border-[1.5px] border-copper-400 text-copper-400 transition-colors duration-300 group-hover:bg-copper-50;
+    }
+
+    .tm-glyph {
+        @apply flex shrink-0 items-center justify-center rounded-lg border border-copper-200 bg-copper-50 font-serif font-semibold text-copper-700;
+    }
+
+    .tm-glyph-navy {
+        @apply flex shrink-0 items-center justify-center rounded-lg bg-navy-500 font-serif font-semibold text-copper-400;
+    }
+
+    .tm-social-btn {
+        @apply flex size-[38px] items-center justify-center rounded-full border border-white/12 bg-white/6 text-white/70 transition-all duration-200 hover:-translate-y-0.5 hover:border-copper-400 hover:bg-copper-400 hover:text-white;
+    }
+
+    .tm-link {
+        @apply font-medium text-copper-600 transition-colors hover:text-copper-700;
+    }
+
+    /* ── Trang kết quả luận giải ────────────────────────────── */
+    .tm-step-num {
+        @apply flex size-8 shrink-0 items-center justify-center rounded-full bg-copper-400 font-serif text-base font-semibold text-white;
+    }
+
+    .tm-tag {
+        @apply rounded-full bg-copper-400 px-3 py-1 text-xs font-semibold text-white shadow-soft-sm;
+    }
+
+    .tm-tag-outline {
+        @apply rounded-full border border-cream-300 bg-white px-3 py-1 text-xs font-semibold text-ink-400;
+    }
+
+    .tm-subhead {
+        @apply mb-3 font-sans text-base font-semibold text-ink-600;
+    }
+
+    .tm-bullets {
+        @apply flex flex-col gap-2 text-base leading-relaxed text-ink-500;
+    }
+
+    .tm-bullets > li {
+        @apply relative pl-4 before:absolute before:top-[0.7em] before:left-0 before:size-1.5 before:rounded-full before:bg-copper-400;
+    }
+
+    .tm-toc-link {
+        @apply flex items-center gap-3 rounded-md px-2.5 py-2.5 text-sm text-ink-500 transition-colors hover:bg-cream-100 hover:text-ink-600;
+    }
+
+    .tm-toc-num {
+        @apply flex size-6 shrink-0 items-center justify-center rounded-full border border-cream-300 text-xs font-semibold text-ink-300;
+    }
+
+    .tm-toc-link.is-active {
+        @apply bg-copper-50 font-semibold text-copper-700;
+    }
+
+    .tm-toc-link.is-active .tm-toc-num {
+        @apply border-copper-400 bg-copper-400 text-white;
+    }
+
+    /* Chữ mẫu bị che mờ trong phần chưa mở khoá - không bao giờ là nội dung thật */
+    .tm-blurred {
+        @apply pointer-events-none blur-[5px] select-none;
+    }
+}
+
+@media print {
+    [data-sticky-header],
+    footer,
+    [data-toast-root],
+    [data-print-hidden] {
+        display: none !important;
+    }
+
+    [data-reveal] {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    [data-tab-panel][hidden] {
+        display: block !important;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Behaviour hooks (toggled by resources/js/app.js)
+|--------------------------------------------------------------------------
+| Drawer and toast state rules stay outside @layer on purpose: unlayered
+| rules beat Tailwind utilities, so they override translate-x-full / opacity-0.
+*/
+@layer components {
+    /* Scroll reveal */
+    [data-reveal] {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+            opacity 0.75s var(--ease-out-expo),
+            transform 0.75s var(--ease-out-expo);
+        transition-delay: var(--reveal-delay, 0ms);
+    }
+
+    [data-reveal='fade-left'] {
+        transform: translateX(32px);
+    }
+
+    [data-reveal='fade-right'] {
+        transform: translateX(-32px);
+    }
+
+    [data-reveal].is-revealed {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Accordion */
+    .tm-accordion-panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.34s var(--ease-out-expo);
+    }
+
+    .tm-accordion-panel > div {
+        overflow: hidden;
+    }
+
+    [data-accordion-item].is-open .tm-accordion-panel {
+        grid-template-rows: 1fr;
+    }
+
+    [data-accordion-item].is-open [data-accordion-chevron] {
+        transform: rotate(180deg);
+    }
+}
+
+/* Mobile drawer */
+body.drawer-open {
+    overflow: hidden;
+}
+
+body.drawer-open [data-drawer] {
+    translate: 0 0;
+}
+
+body.drawer-open [data-drawer-scrim] {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.drawer-open [data-burger] > span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+}
+
+body.drawer-open [data-burger] > span:nth-child(2) {
+    opacity: 0;
+}
+
+body.drawer-open [data-burger] > span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+}
+
+/* Toast */
+[data-toast-root].is-visible {
+    opacity: 1;
+    translate: -50% 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .animate-spin-slow,
+    .animate-float,
+    .animate-fade-up {
+        animation: none;
+    }
+}

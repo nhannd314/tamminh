@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" fill="none">
+  <g stroke="#C89544" fill="none">
+    <circle cx="200" cy="200" r="190" stroke-width="1"/>
+    <circle cx="200" cy="200" r="160" stroke-width="1.2"/>
+    <circle cx="200" cy="200" r="120" stroke-width="0.8" opacity="0.65"/>
+    <circle cx="200" cy="200" r="80" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="200" cy="200" r="40" stroke-width="1.2"/>
+  </g>
+  <g stroke="#C89544" stroke-width="0.8" opacity="0.55">
+    <g transform="translate(200 200)">
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(0)"/>
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(30)"/>
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(60)"/>
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(90)"/>
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(120)"/>
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(150)"/>
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(180)"/>
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(210)"/>
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(240)"/>
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(270)"/>
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(300)"/>
+      <line x1="0" y1="-190" x2="0" y2="-40" transform="rotate(330)"/>
+    </g>
+  </g>
+  <g font-family="Lora, Georgia, serif" font-size="22" fill="#946821" text-anchor="middle">
+    <text x="200" y="32">子</text><text x="290" y="55">丑</text><text x="350" y="120">寅</text>
+    <text x="372" y="210">卯</text><text x="350" y="295">辰</text><text x="290" y="358">巳</text>
+    <text x="200" y="384">午</text><text x="110" y="358">未</text><text x="50" y="295">申</text>
+    <text x="28" y="210">酉</text><text x="50" y="120">戌</text><text x="110" y="55">亥</text>
+  </g>
+  <g transform="translate(200 200)">
+    <path d="M0 -70 L8 0 L0 70 L-8 0 Z" fill="#C89544" opacity="0.85"/>
+    <path d="M0 -70 L8 0 L-8 0 Z" fill="#946821"/>
+    <circle r="6" fill="#15325E"/>
+    <circle r="2" fill="#FBF4E5"/>
+  </g>
+  <g fill="#C89544">
+    <circle cx="200" cy="120" r="2"/><circle cx="270" cy="155" r="2"/><circle cx="270" cy="245" r="2"/>
+    <circle cx="200" cy="280" r="2"/><circle cx="130" cy="245" r="2"/><circle cx="130" cy="155" r="2"/>
+  </g>
+</svg>
