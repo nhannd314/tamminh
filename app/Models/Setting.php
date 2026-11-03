@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 
 /**
  * Cấu hình hệ thống dạng key-value, `value` lưu JSON nên chứa được số, chuỗi, mảng.
- * Key đặt theo nhóm bằng dấu chấm: `pricing.full_package`, `analysis.free_sections`…
+ * Key đặt theo nhóm bằng dấu chấm: `pricing.section.tam_dinh`, `pricing.full_package_discount_percent`…
  */
 #[Fillable(['key', 'value', 'description'])]
 class Setting extends Model

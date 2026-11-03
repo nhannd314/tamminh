@@ -1,27 +1,32 @@
 <?php
 
+use App\AnalysisOrderStatus;
 use App\AnalysisSection;
+use App\Jobs\GenerateAnalysisSection;
+use App\Models\AnalysisOrder;
 use App\Models\FaceAnalysis;
-use App\Models\Order;
-use App\Models\Setting;
-use App\OrderStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    config(['services.sepay.webhook_key' => 'secret-key']);
+    // Việc sinh nội dung sau thanh toán được kiểm tra ở GeminiAnalysisTest.
+    Queue::fake([GenerateAnalysisSection::class]);
 
-    Setting::set('payment.bank', 'MBBank');
-    Setting::set('payment.account_number', '0123456789');
-    Setting::set('payment.account_name', 'CONG TY TAM MINH');
-    Setting::set('payment.transfer_content', '{code}');
+    config([
+        'services.sepay.webhook_key' => 'secret-key',
+        'services.sepay.bank' => 'MBBank',
+        'services.sepay.account_number' => '0123456789',
+        'services.sepay.account_name' => 'Công ty Tâm Minh',
+        'services.sepay.transfer_content' => '{code}',
+    ]);
 });
 
 /**
  * @return array<string, mixed>
  */
-function sepayPayload(Order $order, array $overrides = []): array
+function sepayPayload(AnalysisOrder $order, array $overrides = []): array
 {
     return [
         'id' => 92704,
@@ -68,7 +73,7 @@ test('clicking unlock again reuses the pending order', function () {
 });
 
 test('the popup explains when the receiving account is not configured', function () {
-    Setting::set('payment.account_number', '');
+    config(['services.sepay.account_number' => null]);
     $analysis = FaceAnalysis::factory()->create();
 
     $this->followingRedirects()->post(route('analyses.unlock', $analysis))
@@ -76,12 +81,12 @@ test('the popup explains when the receiving account is not configured', function
 });
 
 test('sepay webhook requires the api key', function () {
-    $order = Order::factory()->create();
+    $order = AnalysisOrder::factory()->create();
 
     postSepay(sepayPayload($order), 'wrong-key')->assertUnauthorized();
     $this->postJson(route('webhooks.sepay'), sepayPayload($order))->assertUnauthorized();
 
-    expect($order->fresh()->status)->toBe(OrderStatus::Pending);
+    expect($order->fresh()->status)->toBe(AnalysisOrderStatus::Pending);
 });
 
 test('sepay webhook marks the matching order as paid and unlocks the section', function () {
@@ -92,7 +97,7 @@ test('sepay webhook marks the matching order as paid and unlocks the section', f
 
     $order->refresh();
 
-    expect($order->status)->toBe(OrderStatus::Paid)
+    expect($order->status)->toBe(AnalysisOrderStatus::Paid)
         ->and($order->payment_method)->toBe('sepay')
         ->and($order->transaction_id)->toBe('sepay:92704')
         ->and($analysis->refresh()->isUnlocked(AnalysisSection::TamDinh))->toBeTrue();
@@ -100,12 +105,23 @@ test('sepay webhook marks the matching order as paid and unlocks the section', f
     $this->getJson(route('analyses.order-status', [$analysis, $order->code]))->assertJson(['paid' => true]);
 });
 
+test('waiting for the payment does not use up the rate limit of the content stream', function () {
+    $analysis = FaceAnalysis::factory()->completed()->create();
+    $order = $analysis->createOrder(AnalysisSection::TamDinh);
+
+    foreach (range(1, 15) as $poll) {
+        $this->getJson(route('analyses.order-status', [$analysis, $order->code]))->assertOk();
+    }
+
+    $this->get(route('analyses.stream', $analysis))->assertOk();
+});
+
 test('sepay webhook ignores outgoing, underpaid and unknown transfers', function (array $overrides) {
     $order = FaceAnalysis::factory()->create()->createOrder(AnalysisSection::TamDinh);
 
     postSepay(sepayPayload($order, $overrides))->assertOk()->assertJson(['success' => true]);
 
-    expect($order->fresh()->status)->toBe(OrderStatus::Pending);
+    expect($order->fresh()->status)->toBe(AnalysisOrderStatus::Pending);
 })->with([
     'outgoing' => [['transferType' => 'out']],
     'underpaid' => [['transferAmount' => 1000]],
@@ -122,6 +138,19 @@ test('sepay webhook can be delivered twice safely', function () {
 });
 
 test('order codes are found in noisy bank transfer content', function () {
-    expect(Order::findCodeIn('ib chuyen tien tmab12cd34 ft123'))->toBe('TMAB12CD34')
-        ->and(Order::findCodeIn('khong co ma'))->toBeNull();
+    expect(AnalysisOrder::findCodeIn('ib chuyen tien tmab12cd34 ft123'))->toBe('TMAB12CD34')
+        ->and(AnalysisOrder::findCodeIn('khong co ma'))->toBeNull();
+});
+
+test('the payment popup tells customers how to reach the shop if the reading does not arrive', function () {
+    config(['site.phone' => '0900-111-222', 'site.zalo' => '0987-654-321', 'site.email' => 'hotro@tamminh.test']);
+    $analysis = FaceAnalysis::factory()->create();
+
+    $response = $this->followingRedirects()->post(route('analyses.unlock', $analysis), ['section' => 'tam_dinh']);
+
+    $response->assertSeeText('Đã thanh toán mà chưa nhận được luận giải?')
+        ->assertSeeText($analysis->orders()->sole()->code)
+        ->assertSee('https://zalo.me/84987654321', false)
+        ->assertSee('tel:0900111222', false)
+        ->assertSeeText('hotro@tamminh.test');
 });

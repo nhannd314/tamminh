@@ -51,7 +51,7 @@
                 </div>
                 <div class="tm-callout mt-auto">
                     <x-ui.icon name="sparkle" :size="16" class="mt-px text-copper-500" />
-                    <p class="text-sm leading-relaxed text-ink-500">Tam đình cân đối - ba đoạn dài đều nhau - báo hiệu cuộc đời hanh thông, phúc lộc viên mãn. Đoạn nào nổi trội sẽ cho biết thời kỳ phát vận rõ rệt nhất.</p>
+                    <p class="text-base leading-relaxed text-ink-500">Tam đình cân đối - ba đoạn dài đều nhau - báo hiệu cuộc đời hanh thông, phúc lộc viên mãn. Đoạn nào nổi trội sẽ cho biết thời kỳ phát vận rõ rệt nhất.</p>
                 </div>
             </x-ui.card>
         </div>
@@ -105,7 +105,7 @@
                     @foreach ($advice as $aspect => $guidance)
                         <div class="grid gap-1 py-3 first:pt-1 sm:grid-cols-[110px_1fr] sm:items-baseline sm:gap-4">
                             <dt class="text-xs font-bold tracking-[0.12em] text-copper-600 uppercase sm:text-sm">{{ $aspect }}</dt>
-                            <dd class="text-[15px] leading-relaxed text-ink-500 sm:text-base">{{ $guidance }}</dd>
+                            <dd class="text-lg leading-relaxed text-ink-500">{{ $guidance }}</dd>
                         </div>
                     @endforeach
                 </dl>

@@ -1,5 +1,5 @@
 {{--
-    Cửa sổ chuyển khoản cho đơn vừa tạo: QR SePay + thông tin tài khoản (bảng settings).
+    Cửa sổ chuyển khoản cho đơn vừa tạo: QR SePay + thông tin tài khoản (.env).
     Tự mở khi tải trang và tự kiểm tra trạng thái đơn; SePay báo đã nhận tiền thì tải lại trang.
 --}}
 @php
@@ -38,7 +38,7 @@
                             {{ $value ?: '—' }}
                             @if ($copyable && $value)
                                 <button type="button" class="cursor-pointer text-copper-500 hover:text-copper-700" data-copy="{{ $value }}" data-copy-message="Đã sao chép {{ mb_strtolower($label) }}." aria-label="Sao chép {{ mb_strtolower($label) }}">
-                                    <x-ui.icon name="link" :size="14" />
+                                    <x-ui.icon name="copy" :size="16" />
                                 </button>
                             @endif
                         </dd>
@@ -73,10 +73,14 @@
             <span class="size-4 shrink-0 animate-spin rounded-full border-2 border-copper-300 border-t-transparent"></span>
             Đang chờ thanh toán… Trang sẽ tự mở khóa khi nhận được tiền.
         </div>
+
+        <x-site.contact-help class="mt-4" :message="'Đã thanh toán mà chưa nhận được luận giải? Liên hệ Tâm Minh kèm mã đơn '.$order->code.':'" />
     @else
         <p class="text-base text-ink-500">
             Tài khoản nhận tiền chưa được cấu hình. Vui lòng liên hệ Tâm Minh để thanh toán đơn
             <b class="font-semibold text-ink-600">{{ $order->code }}</b> (<x-analysis.price :amount="$order->amount" />).
         </p>
+
+        <x-site.contact-help class="mt-4" />
     @endif
 </x-ui.modal>

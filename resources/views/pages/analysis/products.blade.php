@@ -15,7 +15,7 @@
                 </div>
                 <div class="flex flex-1 flex-col gap-1 p-4">
                     <h3 class="font-serif text-lg font-semibold text-ink-600">{{ $product['name'] }}</h3>
-                    <p class="flex-1 text-sm leading-relaxed text-ink-400">{{ $product['description'] }}</p>
+                    <p class="flex-1 text-base leading-relaxed text-ink-400">{{ $product['description'] }}</p>
                     <div class="mt-2 flex flex-wrap items-center justify-between gap-2">
                         <x-analysis.price :amount="$product['price']" class="text-base font-semibold text-copper-600" />
                         <x-ui.button size="sm" data-toast="Cửa hàng vật phẩm phong thủy sắp ra mắt.">Mua ngay</x-ui.button>

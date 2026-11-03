@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
-use App\AnalysisSection;
-use App\Models\FaceAnalysis;
 use App\Models\Order;
+use App\OrderPaymentMethod;
 use App\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,50 +19,36 @@ class OrderFactory extends Factory
      */
     public function definition(): array
     {
+        $subtotal = fake()->numberBetween(2, 30) * 50000;
+
         return [
-            'face_analysis_id' => FaceAnalysis::factory(),
-            'section' => AnalysisSection::TamDinh,
-            'subtotal' => 49000,
-            'discount' => 0,
-            'amount' => 49000,
-            'currency' => 'VND',
-            'status' => OrderStatus::Pending,
+            'customer_name' => fake()->name(),
+            'phone' => '0'.fake()->numerify('9########'),
+            'address' => fake()->address(),
+            'note' => null,
+            'payment_method' => OrderPaymentMethod::Cod,
+            'subtotal' => $subtotal,
+            'shipping_fee' => OrderPaymentMethod::DEFAULT_SHIPPING_FEE,
+            'total' => $subtotal + OrderPaymentMethod::DEFAULT_SHIPPING_FEE,
+            'status' => OrderStatus::New,
         ];
     }
 
     /**
-     * Use the given section.
+     * Chuyển khoản online, miễn phí giao hàng, chưa nhận tiền.
      */
-    public function section(AnalysisSection $section, int $amount = 49000): static
+    public function online(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'section' => $section,
-            'subtotal' => $amount,
-            'amount' => $amount,
+        return $this->state(fn (array $attributes): array => [
+            'payment_method' => OrderPaymentMethod::Online,
+            'shipping_fee' => 0,
+            'total' => $attributes['subtotal'],
         ]);
     }
 
-    /**
-     * Indicate that the order buys every paid section.
-     */
-    public function fullPackage(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'section' => null,
-            'subtotal' => 199000,
-            'amount' => 199000,
-        ]);
-    }
-
-    /**
-     * Indicate that the order has been paid.
-     */
     public function paid(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'status' => OrderStatus::Paid,
-            'payment_method' => 'bank_transfer',
-            'transaction_id' => fake()->uuid(),
+        return $this->state(fn (array $attributes): array => [
             'paid_at' => now(),
         ]);
     }

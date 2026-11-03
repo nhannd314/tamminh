@@ -20,11 +20,11 @@
             <span class="font-medium text-ink-600">{{ $analysis->name }}</span>
         </nav>
 
-        <div class="grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-8">
+        <div class="grid items-start gap-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-8">
             @include('pages.analysis.sidebar')
 
             <div class="flex min-w-0 flex-col gap-5">
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <div class="flex flex-wrap items-center gap-3">
                             <h1 class="font-serif text-2xl font-semibold text-ink-600 sm:text-3xl">Kết quả luận giải tướng số</h1>
@@ -38,15 +38,20 @@
                     @include('pages.analysis.actions')
                 </div>
 
-                @include('pages.analysis.overview')
+                @if ($analysis->isGenerating())
+                    {{-- Các phần đang chờ hiện spinner tại chỗ; JS mở luồng stream từ đây. --}}
+                    <div hidden data-generation-stream="{{ route('analyses.stream', $analysis) }}" data-generation-status="{{ route('analyses.generation-status', $analysis) }}"></div>
+                @endif
+
+                @include('pages.analysis.overview', ['lazy' => $playsIntro])
                 @include('pages.analysis.sections.ngu-hanh', ['item' => $sections['ngu_hanh']])
                 @include('pages.analysis.sections.than-khi-sac', ['item' => $sections['than_khi_sac']])
                 @include('pages.analysis.sections.tam-dinh', ['item' => $sections['tam_dinh']])
                 @include('pages.analysis.sections.ngu-quan', ['item' => $sections['ngu_quan']])
                 @include('pages.analysis.sections.thap-nhi-cung', ['item' => $sections['thap_nhi_cung']])
                 @include('pages.analysis.sections.phong-thuy', ['item' => $sections['phong_thuy']])
-                @unless ($analysis->isFullyUnlocked())
-                    <form method="POST" action="{{ route('analyses.unlock', $analysis) }}" data-reveal data-print-hidden
+                @if ($analysis->purchasableSections() !== [])
+                    <form method="POST" action="{{ route('analyses.unlock', $analysis) }}" data-unlock-form data-reveal data-print-hidden
                         class="flex flex-col items-center gap-5 rounded-xl bg-navy-500 p-6 text-center sm:flex-row sm:justify-between sm:p-8 sm:text-left">
                         @csrf
                         <div class="min-w-0">
@@ -55,9 +60,9 @@
                                 Chỉ <span class="text-copper-300">{{ intdiv($fullPackage['amount'], 1000) }}k</span> mở khóa toàn bộ luận giải
                             </h3>
                             <p class="mt-2 text-base text-cream-50/80">
-                                Đọc trọn {{ count($analysis->lockedSections()) }} phần còn lại, tải PDF và lưu trữ trọn đời.
-                                @if ($fullPackage['discount'] > 0)
-                                    <span class="whitespace-nowrap text-copper-200">Đã giảm <x-analysis.price :amount="$fullPackage['discount']" /> nhờ các phần bạn đã mua.</span>
+                                Đọc trọn {{ count($analysis->purchasableSections()) }} phần còn lại, tải PDF và lưu trữ trọn đời.
+                                @if ($fullPackageDiscountPercent > 0)
+                                    <span class="whitespace-nowrap text-copper-200">Giảm {{ $fullPackageDiscountPercent }}% so với mua lẻ{{ $hasBoughtSections ? ', đã trừ các phần bạn đã mua' : '' }}.</span>
                                 @endif
                             </p>
                         </div>
@@ -65,7 +70,7 @@
                             Mở khóa ngay · <x-analysis.price :amount="$fullPackage['amount']" />
                         </x-ui.button>
                     </form>
-                @endunless
+                @endif
 
                 @include('pages.analysis.sections.advice', ['item' => $sections['advice']])
             </div>

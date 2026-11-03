@@ -9,7 +9,7 @@
     'locked' => false,
 ])
 
-<div {{ $attributes->class('flex max-w-[860px] flex-col gap-6 text-base leading-relaxed text-ink-500') }}>
+<div {{ $attributes->class('flex max-w-[860px] flex-col gap-6 text-[17px] text-ink-500') }}>
     @foreach ($blocks as $block)
         <div class="flex flex-col gap-2">
             <h4 class="font-serif text-lg font-semibold text-ink-600">{{ $block['title'] }}</h4>

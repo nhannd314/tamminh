@@ -2,18 +2,18 @@
 
 namespace App\Support;
 
+use App\Models\AnalysisOrder;
 use App\Models\Order;
-use App\Models\Setting;
 use Illuminate\Support\Str;
 
 /**
- * Thông tin chuyển khoản cho một đơn: tài khoản nhận (bảng settings) + mã QR của SePay
- * có sẵn số tiền và nội dung là mã đơn, để webhook SePay tự đối chiếu và mở khoá.
+ * Thông tin chuyển khoản cho một đơn (mở khoá xem tướng hoặc vật phẩm): tài khoản nhận (.env, `services.sepay`)
+ * + mã QR của SePay có sẵn số tiền và nội dung là mã đơn, để webhook SePay tự đối chiếu.
  */
 final readonly class PaymentInstructions
 {
     public function __construct(
-        public Order $order,
+        public AnalysisOrder|Order $order,
         public string $bank,
         public string $accountNumber,
         public string $accountName,
@@ -21,15 +21,15 @@ final readonly class PaymentInstructions
         public string $note,
     ) {}
 
-    public static function for(Order $order): self
+    public static function for(AnalysisOrder|Order $order): self
     {
         return new self(
             order: $order,
-            bank: (string) Setting::get('payment.bank', ''),
-            accountNumber: (string) Setting::get('payment.account_number', ''),
-            accountName: (string) Setting::get('payment.account_name', ''),
-            content: Str::replace('{code}', $order->code, (string) Setting::get('payment.transfer_content', '{code}')),
-            note: (string) Setting::get('payment.note', ''),
+            bank: (string) config('services.sepay.bank'),
+            accountNumber: (string) config('services.sepay.account_number'),
+            accountName: Str::upper(Str::ascii((string) config('services.sepay.account_name'))),
+            content: Str::replace('{code}', $order->code, (string) config('services.sepay.transfer_content')),
+            note: (string) config('services.sepay.note'),
         );
     }
 

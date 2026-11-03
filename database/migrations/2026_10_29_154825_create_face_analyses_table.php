@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('birth_date');
             $table->unsignedTinyInteger('birth_hour')->nullable();
             $table->unsignedTinyInteger('birth_minute')->nullable();
-            $table->string('portrait_path');
+            $table->string('portrait_path')->nullable();
 
             $table->string('status', 20)->default('pending')->index();
             $table->string('ai_model', 60)->nullable();

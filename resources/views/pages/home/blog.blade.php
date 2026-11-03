@@ -6,12 +6,12 @@
 
         <div class="grid grid-cols-1 gap-[18px] sm:grid-cols-2 lg:grid-cols-3 lg:gap-[22px]" data-reveal-stagger>
             @foreach ($posts as $post)
-                <x-cards.post :post="$post" :class="$loop->last && $loop->odd ? 'sm:max-lg:col-span-2' : ''" data-reveal />
+                <x-cards.post :post="$post->card()" :href="route('posts.show', $post)" :class="$loop->last && $loop->odd ? 'sm:max-lg:col-span-2' : ''" data-reveal />
             @endforeach
         </div>
 
         <div class="mt-9 flex justify-center">
-            <x-ui.button href="#" variant="outline" pill trailing-icon="arrow" class="gap-2.5 uppercase tracking-wide" data-toast="Mở trang bài viết.">
+            <x-ui.button :href="route('posts.index')" variant="outline" pill trailing-icon="arrow" class="gap-2.5 uppercase tracking-wide">
                 Xem tất cả bài viết
             </x-ui.button>
         </div>

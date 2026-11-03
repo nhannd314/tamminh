@@ -33,6 +33,22 @@ class FaceAnalysisFactory extends Factory
     }
 
     /**
+     * Indicate that the portrait was deleted after the retention period.
+     */
+    public function withoutPortrait(): static
+    {
+        return $this->state(fn (array $attributes) => ['portrait_path' => null, 'face_crop_path' => null]);
+    }
+
+    /**
+     * Indicate that Gemini is still generating some sections.
+     */
+    public function processing(): static
+    {
+        return $this->state(fn (array $attributes) => ['status' => AnalysisStatus::Processing]);
+    }
+
+    /**
      * Indicate that Gemini has finished analysing the free sections.
      */
     public function completed(): static

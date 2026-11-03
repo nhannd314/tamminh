@@ -58,6 +58,22 @@
                     <span class="tm-rule"></span>
                 </div>
                 <blockquote class="tm-quote">"Tướng tự tâm sinh, tâm tự tướng diệt."</blockquote>
+
+                {{-- Thang chữ: khai báo ở @theme (resources/css/app.css), text-sm và text-xs đã được nâng cỡ --}}
+                <div class="overflow-x-auto border-t border-cream-300 pt-5">
+                    <table class="w-full min-w-[520px] text-left text-sm">
+                        <thead class="text-xs font-semibold tracking-eyebrow text-ink-300 uppercase">
+                            <tr><th class="pb-2">Class</th><th class="pb-2">Cỡ</th><th class="pb-2">Dùng cho</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-cream-200 text-ink-500">
+                            <tr><td class="py-2 font-mono">text-xs</td><td class="py-2">14px</td><td class="py-2 text-xs">Chữ phụ nhỏ nhất: nhãn in hoa, chú thích, tag, huy hiệu</td></tr>
+                            <tr><td class="py-2 font-mono">text-sm</td><td class="py-2">16px</td><td class="py-2 text-sm">Chữ giao diện: menu, nhãn form, ô nhập, nút, danh sách</td></tr>
+                            <tr><td class="py-2 font-mono">text-base</td><td class="py-2">16px</td><td class="py-2 text-base">Nội dung, đoạn văn</td></tr>
+                            <tr><td class="py-2 font-mono">text-lg trở lên</td><td class="py-2">18px+</td><td class="py-2 text-lg">Tiêu đề</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="mt-3 text-xs text-ink-300">Không dùng cỡ chữ tuỳ ý nhỏ hơn 14px (text-[12px]…), kể cả chữ trong SVG.</p>
+                </div>
             </div>
         </section>
 
@@ -143,7 +159,7 @@
                 </x-ui.card>
             </div>
             <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                <x-cards.expert :expert="['glyph' => '明', 'name' => 'Thầy Minh Quang', 'role' => 'Chuyên gia tướng số', 'years' => 30, 'sessions' => 1287, 'photo' => null]" />
+                <x-cards.expert :expert="new \App\Models\Expert(['glyph' => '明', 'name' => 'Thầy Minh Quang', 'slug' => 'minh-quang', 'years_experience' => 30, 'sessions_count' => 1287])" />
                 <x-cards.review :review="['rating' => 4, 'quote' => 'Phần lời khuyên cải vận rất thực tế.', 'name' => 'Phạm Đức Anh', 'role' => 'Lập trình viên · Hà Nội', 'service' => 'Luận giải nhân tướng', 'avatar' => 'Đ', 'tone' => 'navy']" />
                 <x-cards.post :post="['category' => 'Tử vi', 'glyph' => '紫', 'tone' => 'navy', 'title' => 'Năm Bính Ngọ 2026: vận khí 12 con giáp', 'excerpt' => 'Lưu niên 2026 đem theo sự dịch chuyển của Thái Tuế, Tam Tai và Kim Lâu.', 'author' => 'Thầy Huyền Lâm', 'date' => '08 thg 5, 2026', 'minutes' => 12]" />
             </div>
@@ -171,7 +187,7 @@
                 @foreach ($icons as $icon)
                     <div class="flex flex-col items-center gap-1.5" title="{{ $icon }}">
                         <x-ui.icon :name="$icon" />
-                        <span class="text-[10px] text-ink-300">{{ $icon }}</span>
+                        <span class="text-xs text-ink-300">{{ $icon }}</span>
                     </div>
                 @endforeach
             </div>

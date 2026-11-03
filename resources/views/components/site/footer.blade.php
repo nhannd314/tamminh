@@ -1,15 +1,22 @@
 @php
+    $page = fn (string $slug): string => route('pages.show', $slug);
+
+    // Mục chưa có trang riêng thì để '#'.
     $columns = [
-        'Dịch vụ' => ['Xem tướng số', 'Xem chỉ tay', 'Phong thủy nhà ở', 'Tư vấn 1-1 với Thầy', 'Xem ngày tốt', 'Đặt tên con'],
-        'Khám phá' => ['Trang chủ', 'Đội ngũ chuyên gia', 'Kiến thức tướng số', 'Câu chuyện khách hàng', 'Cộng tác viên', 'Chương trình affiliate'],
-        'Hỗ trợ' => ['Câu hỏi thường gặp', 'Chính sách bảo mật', 'Điều khoản dịch vụ', 'Chính sách hoàn tiền', 'Hướng dẫn sử dụng', 'Liên hệ'],
+        'Dịch vụ' => ['Xem tướng số' => url('/#xem-tuong'), 'Xem chỉ tay' => url('/#xem-chi-tay'), 'Phong thủy nhà ở' => '#', 'Tư vấn 1-1 với Thầy' => '#', 'Xem ngày tốt' => '#', 'Đặt tên con' => '#'],
+        'Khám phá' => ['Trang chủ' => url('/'), 'Giới thiệu' => $page('gioi-thieu'), 'Kiến thức tướng số' => route('posts.index'), 'Câu chuyện khách hàng' => '#', 'Cộng tác viên' => '#', 'Chương trình affiliate' => route('affiliate.landing')],
+        'Hỗ trợ' => ['Câu hỏi thường gặp' => url('/#cau-hoi'), 'Chính sách bảo mật' => $page('chinh-sach-bao-mat'), 'Điều khoản dịch vụ' => $page('dieu-khoan-dich-vu'), 'Hướng dẫn sử dụng' => $page('huong-dan-su-dung'), 'Liên hệ' => $page('lien-he')],
     ];
 
+    $legalLinks = ['Điều khoản' => $page('dieu-khoan-dich-vu'), 'Bảo mật' => $page('chinh-sach-bao-mat'), 'Cookie' => $page('chinh-sach-cookie')];
+
     $contacts = [
-        'phone' => '0888-11-2626',
-        'mail' => 'contact@tamminh.vn',
-        'pin' => 'Số 26A ngõ 22 Thạch Bàn, Long Biên, Hà Nội',
+        'phone' => \App\Support\ShopContact::hotline(),
+        'mail' => \App\Support\ShopContact::email(),
+        'pin' => \App\Support\ShopContact::address(),
     ];
+
+    $socialLinks = \App\Support\ShopContact::socialLinks();
 @endphp
 
 <footer class="relative bg-navy-500 pt-12 text-white/78 lg:pt-16">
@@ -33,8 +40,8 @@
                 <div>
                     <div class="tm-overline mb-[18px] text-copper-400">{{ $heading }}</div>
                     <ul class="flex flex-col gap-2.5">
-                        @foreach ($links as $link)
-                            <li><a href="#" class="text-sm leading-snug text-white/70 transition-colors hover:text-copper-400">{{ $link }}</a></li>
+                        @foreach ($links as $link => $href)
+                            <li><a href="{{ $href }}" class="text-sm leading-snug text-white/70 transition-colors hover:text-copper-400">{{ $link }}</a></li>
                         @endforeach
                     </ul>
                 </div>
@@ -50,21 +57,23 @@
                     </x-ui.button>
                 </form>
                 <p class="mt-2.5 text-xs leading-relaxed text-white/50">Không spam. Hủy đăng ký bất cứ lúc nào.</p>
-                <div class="mt-5 flex gap-2.5">
-                    @foreach (['facebook', 'youtube', 'tiktok', 'zalo'] as $network)
-                        <x-ui.social-button :network="$network" />
-                    @endforeach
-                </div>
+                @if ($socialLinks !== [])
+                    <div class="mt-5 flex gap-2.5">
+                        @foreach ($socialLinks as $network => $href)
+                            <x-ui.social-button :network="$network" :href="$href" target="_blank" rel="noopener" />
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
 
         <div class="flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:flex-row sm:items-center">
             <div class="text-xs leading-relaxed text-white/55">
-                © {{ date('Y') }} Tâm Minh JSC. <span class="mx-1.5 text-white/30">·</span> MST 0108234567 <span class="mx-1.5 text-white/30">·</span> Đã đăng ký với Bộ Công Thương
+                © {{ date('Y') }} {{ config('site.company') }}. <span class="mx-1.5 text-white/30">·</span> MST {{ config('site.tax_code') }} <span class="mx-1.5 text-white/30">·</span> Đã đăng ký với Bộ Công Thương
             </div>
             <div class="flex flex-wrap gap-x-5 gap-y-2.5">
-                @foreach (['Điều khoản', 'Bảo mật', 'Cookie', 'Sitemap'] as $legal)
-                    <a href="#" class="text-xs text-white/60 transition-colors hover:text-copper-400">{{ $legal }}</a>
+                @foreach ($legalLinks as $legal => $href)
+                    <a href="{{ $href }}" class="text-xs text-white/60 transition-colors hover:text-copper-400">{{ $legal }}</a>
                 @endforeach
             </div>
         </div>

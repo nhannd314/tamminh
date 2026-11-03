@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Đăng ký - Tâm Minh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Manrope:wght@300;400;500;600;700;800&display=swap"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{
+fontSize:{xs:['0.75rem',{lineHeight:'1rem'}],sm:['0.875rem',{lineHeight:'1.25rem'}],base:['1rem',{lineHeight:'1.5rem'}],lg:['1.125rem',{lineHeight:'1.75rem'}],xl:['1.25rem',{lineHeight:'1.75rem'}],'2xl':['1.5rem',{lineHeight:'2rem'}],'3xl':['1.875rem',{lineHeight:'2.25rem'}],'4xl':['2.25rem',{lineHeight:'2.5rem'}],'5xl':['3rem',{lineHeight:'1.15'}]},
+colors:{copper:{50:'#FBF4E5',100:'#F4E2BC',200:'#E9C886',300:'#DAA85A',400:'#C89544',500:'#B6822F',600:'#946821',700:'#6E4D17'},navy:{50:'#EAEEF5',100:'#C5CFE0',200:'#8898BA',300:'#4D6592',400:'#25446F',500:'#15325E',600:'#112A4F',700:'#0B1E3C'},cream:{50:'#FDFBF6',100:'#FAF6EC',200:'#F2EBD8',300:'#E8DCC0',400:'#C9B68C'},ink:{100:'#DCD6CA',200:'#B6AEA0',300:'#847C70',400:'#565049',500:'#2C2924',600:'#1A1814'}},
+fontFamily:{serif:['Lora','Georgia','serif'],sans:['Manrope','system-ui','-apple-system','sans-serif']},
+boxShadow:{'soft-sm':'0 2px 6px rgba(70,50,20,0.06)','soft-md':'0 8px 24px rgba(70,50,20,0.08)','soft-lg':'0 20px 48px rgba(70,50,20,0.10)'}
+}}};
+</script>
+<style type="text/tailwindcss">
+@layer components{
+.tm-field{@apply flex flex-col gap-1.5}
+.tm-label{@apply text-sm font-medium text-ink-500}
+.tm-input{@apply w-full rounded-md border border-cream-300 bg-white px-3.5 py-3 text-sm text-ink-600 outline-none transition placeholder:text-ink-200 focus:border-copper-400 focus:ring-2 focus:ring-copper-400/20}
+.tm-input.is-error{@apply border-red-400 focus:border-red-400 focus:ring-red-400/20}
+.tm-err{@apply hidden text-xs text-red-600}
+.tm-check{@apply mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-copper-400}
+.tm-btn{@apply inline-flex cursor-pointer select-none items-center justify-center gap-2 rounded-md font-sans text-sm font-semibold transition-all duration-200 focus:outline-none}
+.tm-btn-block{@apply w-full justify-center px-7 py-4}
+.tm-btn-copper{@apply bg-copper-400 text-white shadow-soft-sm hover:bg-copper-500 active:scale-[0.97]}
+.tm-btn-google{@apply w-full justify-center border border-cream-300 bg-white px-7 py-[15px] text-ink-500 shadow-soft-sm hover:border-copper-300 hover:bg-cream-50 active:scale-[0.99]}
+.tm-eye{@apply absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded text-ink-200 hover:text-ink-400}
+}
+</style>
+<style>
+body{font-family:'Manrope',system-ui,sans-serif}
+::selection{background:#F4E2BC;color:#1A1814}
+a{color:#946821}a:hover{color:#6E4D17}
+@keyframes fade-up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.anim-fade-up{animation:fade-up .9s cubic-bezier(.16,1,.3,1) both}
+@keyframes spin-slow{to{transform:rotate(360deg)}}
+.spin-slow{animation:spin-slow 60s linear infinite}
+#toast{transition:opacity .3s,transform .3s}
+.bar{transition:background-color .25s}
+</style>
+<style id="om-tokens">:root{--text-xs:.75rem;--text-sm:.875rem;--text-base:1rem;--text-lg:1.125rem;--text-xl:1.25rem;--text-2xl:1.5rem;--text-3xl:1.875rem;--text-4xl:2.25rem;--text-5xl:3rem;--space-card:1.75rem;--radius-card:.75rem}html{font-size:16px}</style>
+</head>
+<body class="min-h-screen bg-cream-100 text-ink-500 antialiased">
+<div class="flex min-h-screen">
+<aside class="relative hidden w-[44%] flex-col justify-between overflow-hidden bg-navy-600 p-12 lg:flex" data-screen-label="Brand panel">
+<img src="assets/zodiac-wheel.svg" alt="" class="spin-slow pointer-events-none absolute -bottom-56 -right-56 w-[720px] opacity-[0.14]"/>
+<a href="Trang chủ (Tailwind).html" class="relative flex items-center gap-3" style="color:inherit">
+<img src="assets/logo-mark.svg" alt="Tâm Minh" class="h-12 w-12"/>
+<span class="leading-none"><span class="block font-serif text-2xl font-semibold text-cream-50">Tâm Minh</span><span class="mt-1 block text-xs tracking-wide text-navy-200">Hiểu mình - An tâm sống</span></span>
+</a>
+<div class="relative max-w-md">
+<span class="mb-6 block h-0.5 w-14 bg-copper-400"></span>
+<p class="font-serif text-3xl font-medium leading-snug text-cream-50">Bắt đầu hành trình<br/>hiểu rõ bản thân.</p>
+<ul class="mt-8 flex flex-col gap-4">
+<li class="flex items-start gap-3 text-sm leading-relaxed text-navy-100"><i data-lucide="bookmark" class="mt-0.5 h-[18px] w-[18px] shrink-0 text-copper-300"></i><span>Lưu kết quả phân tích tướng mặt và xem lại bất cứ lúc nào</span></li>
+<li class="flex items-start gap-3 text-sm leading-relaxed text-navy-100"><i data-lucide="calendar-check" class="mt-0.5 h-[18px] w-[18px] shrink-0 text-copper-300"></i><span>Đặt lịch tư vấn trực tiếp với chuyên gia</span></li>
+<li class="flex items-start gap-3 text-sm leading-relaxed text-navy-100"><i data-lucide="gift" class="mt-0.5 h-[18px] w-[18px] shrink-0 text-copper-300"></i><span>Ưu đãi riêng cho thành viên khi mua vật phẩm phong thủy</span></li>
+</ul>
+</div>
+<p class="relative text-xs text-navy-300">© 2026 Tâm Minh.</p>
+</aside>
+<main class="flex flex-1 items-center justify-center px-4 py-12 sm:px-6" data-screen-label="Đăng ký">
+<div class="anim-fade-up w-full max-w-[460px]">
+<a href="Trang chủ (Tailwind).html" class="mb-8 flex items-center justify-center gap-3 lg:hidden" style="color:inherit"><img src="assets/logo-mark.svg" alt="Tâm Minh" class="h-12 w-12"/><span class="font-serif text-2xl font-semibold text-ink-600">Tâm Minh</span></a>
+<div class="rounded-[10px] border border-cream-300 bg-white p-6 shadow-soft-md sm:p-9">
+<h1 class="font-serif text-2xl font-semibold text-ink-600">Tạo tài khoản</h1>
+<p class="mt-1.5 text-sm text-ink-300">Miễn phí, chỉ mất chưa đến một phút.</p>
+<button id="btn-google" class="tm-btn tm-btn-google mt-7">
+<svg width="19" height="19" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.620 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.090-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+<span>Đăng ký với Google</span>
+</button>
+<div class="mt-6 flex items-center gap-3.5"><span class="h-px flex-1 bg-cream-300"></span><span class="text-xs font-semibold uppercase tracking-[0.14em] text-ink-200">hoặc dùng email</span><span class="h-px flex-1 bg-cream-300"></span></div>
+<form id="reg-form" class="mt-6 flex flex-col gap-5" novalidate>
+<div class="tm-field">
+<label class="tm-label" for="name">Họ và tên</label>
+<input class="tm-input" id="name" type="text" autocomplete="name" placeholder="Nguyễn Văn An"/>
+<p class="tm-err" data-for="name">Vui lòng nhập họ tên.</p>
+</div>
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+<div class="tm-field">
+<label class="tm-label" for="email">Email</label>
+<input class="tm-input" id="email" type="email" autocomplete="email" placeholder="ban@vidu.com"/>
+<p class="tm-err" data-for="email">Email chưa hợp lệ.</p>
+</div>
+<div class="tm-field">
+<label class="tm-label" for="phone">Số điện thoại <span class="font-normal text-ink-200">(tùy chọn)</span></label>
+<input class="tm-input" id="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="09xx xxx xxx"/>
+<p class="tm-err" data-for="phone">Số điện thoại chưa đúng.</p>
+</div>
+</div>
+<div class="tm-field">
+<label class="tm-label" for="password">Mật khẩu</label>
+<div class="relative">
+<input class="tm-input pr-11" id="password" type="password" autocomplete="new-password" placeholder="Tối thiểu 8 ký tự"/>
+<button type="button" class="tm-eye" data-eye="password" aria-label="Hiện mật khẩu"><i data-lucide="eye" class="h-[18px] w-[18px]"></i></button>
+</div>
+<div class="mt-1 flex items-center gap-3">
+<div class="grid flex-1 grid-cols-4 gap-1.5"><span class="bar h-1 rounded-full bg-cream-200"></span><span class="bar h-1 rounded-full bg-cream-200"></span><span class="bar h-1 rounded-full bg-cream-200"></span><span class="bar h-1 rounded-full bg-cream-200"></span></div>
+<span id="strength" class="w-16 text-right text-xs font-medium text-ink-300"></span>
+</div>
+<p class="tm-err" data-for="password">Mật khẩu cần ít nhất 8 ký tự.</p>
+</div>
+<div class="tm-field">
+<label class="tm-label" for="confirm">Nhập lại mật khẩu</label>
+<div class="relative">
+<input class="tm-input pr-11" id="confirm" type="password" autocomplete="new-password" placeholder="••••••••"/>
+<button type="button" class="tm-eye" data-eye="confirm" aria-label="Hiện mật khẩu"><i data-lucide="eye" class="h-[18px] w-[18px]"></i></button>
+</div>
+<p class="tm-err" data-for="confirm">Mật khẩu nhập lại không khớp.</p>
+</div>
+<div class="flex flex-col gap-3">
+<label class="flex cursor-pointer items-start gap-2.5 text-sm leading-relaxed text-ink-400"><input type="checkbox" id="terms" class="tm-check"/><span>Tôi đồng ý với <a href="#" data-toast="Mở Điều khoản sử dụng (demo)." class="font-medium">Điều khoản sử dụng</a> và <a href="#" data-toast="Mở Chính sách bảo mật (demo)." class="font-medium">Chính sách bảo mật</a></span></label>
+<p class="tm-err -mt-1 pl-6" data-for="terms">Bạn cần đồng ý với điều khoản để tiếp tục.</p>
+<label class="flex cursor-pointer items-start gap-2.5 text-sm leading-relaxed text-ink-400"><input type="checkbox" class="tm-check" checked/><span>Nhận bài viết phong thủy và ưu đãi qua email</span></label>
+</div>
+<button type="submit" class="tm-btn tm-btn-block tm-btn-copper">Tạo tài khoản</button>
+</form>
+</div>
+<p class="mt-6 text-center text-sm text-ink-300">Đã có tài khoản? <a href="Đăng nhập.html" class="font-semibold">Đăng nhập</a></p>
+</div>
+</main>
+</div>
+<div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-[90] -translate-x-1/2 translate-y-3 rounded-md bg-ink-600 px-5 py-3 text-sm font-medium text-cream-50 opacity-0 shadow-soft-lg"></div>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+lucide.createIcons();
+var toastEl=document.getElementById('toast'),tt;
+function toast(m){toastEl.textContent=m;toastEl.style.opacity='1';toastEl.style.transform='translate(-50%,0)';clearTimeout(tt);tt=setTimeout(function(){toastEl.style.opacity='0';toastEl.style.transform='translate(-50%,12px)'},2600)}
+document.querySelectorAll('[data-toast]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();toast(el.getAttribute('data-toast'))})});
+document.getElementById('btn-google').addEventListener('click',function(){var b=this;b.disabled=true;b.style.opacity='.6';toast('Đang chuyển đến Google…');setTimeout(function(){b.disabled=false;b.style.opacity='';toast('Tạo tài khoản bằng Google thành công (demo).')},1600)});
+document.querySelectorAll('[data-eye]').forEach(function(btn){btn.addEventListener('click',function(){var i=document.getElementById(btn.dataset.eye),show=i.type==='password';i.type=show?'text':'password';btn.setAttribute('aria-label',show?'Ẩn mật khẩu':'Hiện mật khẩu');btn.style.color=show?'#946821':''})});
+var $=function(id){return document.getElementById(id)};
+var bars=document.querySelectorAll('.bar'),lbl=$('strength');
+var levels=[['',''],['Yếu','#DC2626'],['Trung bình','#DAA85A'],['Khá','#B6822F'],['Mạnh','#15803D']];
+$('password').addEventListener('input',function(){var v=this.value,s=0;if(v.length>=8)s++;if(/[A-Z]/.test(v)&&/[a-z]/.test(v))s++;if(/\d/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;if(v&&!s)s=1;bars.forEach(function(b,i){b.style.backgroundColor=i<s?levels[s][1]:''});lbl.textContent=levels[s][0];lbl.style.color=levels[s][1]||''});
+function setErr(id,bad){var e=document.querySelector('.tm-err[data-for="'+id+'"]'),i=$(id);e.classList.toggle('hidden',!bad);e.classList.toggle('block',bad);if(i.classList.contains('tm-input'))i.classList.toggle('is-error',bad);return bad}
+['name','email','phone','password','confirm'].forEach(function(id){$(id).addEventListener('input',function(){setErr(id,false)})});
+$('terms').addEventListener('change',function(){setErr('terms',false)});
+$('reg-form').addEventListener('submit',function(e){e.preventDefault();
+var bad=[setErr('name',!$('name').value.trim()),setErr('email',!/^\S+@\S+\.\S+$/.test($('email').value)),setErr('phone',$('phone').value.trim()&&!/^(\+84|0)\d{9,10}$/.test($('phone').value.replace(/\s/g,''))),setErr('password',$('password').value.length<8),setErr('confirm',!$('confirm').value||$('confirm').value!==$('password').value),setErr('terms',!$('terms').checked)];
+var ids=['name','email','phone','password','confirm','terms'],first=bad.indexOf(true);
+if(first>-1){$(ids[first]).focus();return}
+toast('Tạo tài khoản thành công (demo). Kiểm tra email để xác nhận.')});
+})();
+</script>
+</body>
+</html>

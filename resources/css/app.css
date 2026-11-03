@@ -15,6 +15,19 @@
     --font-serif: 'Lora', 'Source Serif Pro', Georgia, serif;
     --font-sans: 'Manrope', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
+    /*
+     * Thang chữ: chữ giao diện và nội dung (menu, form, nút, đoạn văn) tối thiểu 16px,
+     * chữ phụ (nhãn in hoa, chú thích, tag) tối thiểu 14px. Nâng hai cỡ nhỏ nhất của Tailwind
+     * để mọi thiết kế dùng text-sm / text-xs, kể cả sau này, tự đạt chuẩn:
+     *   text-xs   14px  chữ phụ        text-sm   16px  chữ giao diện
+     *   text-base 16px  nội dung       text-lg+  tiêu đề
+     * Không dùng cỡ chữ tuỳ ý dưới 14px (text-[12px]…).
+     */
+    --text-xs: 0.875rem;
+    --text-xs--line-height: calc(1.25 / 0.875);
+    --text-sm: 1rem;
+    --text-sm--line-height: calc(1.5 / 1);
+
     --text-5xl--line-height: 1.15;
     --text-6xl--line-height: 1.1;
 
@@ -150,7 +163,7 @@
     }
 
     .tm-lead {
-        @apply text-sm leading-relaxed text-ink-500 sm:text-base;
+        @apply text-lg leading-relaxed text-ink-500;
     }
 
     .tm-rule {
@@ -158,7 +171,7 @@
     }
 
     .tm-eyebrow {
-        @apply inline-flex items-center gap-1.5 rounded-full border border-copper-200 bg-copper-50 px-4 py-2 font-sans text-sm font-semibold tracking-eyebrow text-copper-700 uppercase;
+        @apply inline-flex items-center gap-1.5 rounded-full border border-copper-200 bg-copper-50 px-4 py-2 font-sans text-[15px] font-semibold tracking-eyebrow text-copper-700 uppercase;
     }
 
     .tm-overline {
@@ -179,7 +192,7 @@
     }
 
     .tm-card-desc {
-        @apply text-base leading-relaxed text-ink-300;
+        @apply text-[17px] leading-relaxed text-ink-300;
     }
 
     .tm-panel {
@@ -199,7 +212,7 @@
     }
 
     .tm-quote {
-        @apply rounded-r-md border-l-2 border-copper-400 bg-copper-50 p-4 font-serif text-base leading-relaxed text-ink-600 italic;
+        @apply rounded-r-md border-l-2 border-copper-400 bg-copper-50 p-4 font-serif text-lg leading-relaxed text-ink-600 italic;
     }
 
     /* ── Form controls ──────────────────────────────────────── */
@@ -212,11 +225,11 @@
     }
 
     .tm-input {
-        @apply w-full rounded-md border border-cream-300 bg-white px-3.5 py-3 text-base text-ink-600 transition outline-none placeholder:text-ink-200 sm:text-sm focus:border-copper-400 focus:ring-2 focus:ring-copper-400/20 aria-invalid:border-danger;
+        @apply w-full rounded-md border border-cream-300 bg-white px-3.5 py-3 text-base text-ink-600 transition outline-none placeholder:text-ink-200 focus:border-copper-400 focus:ring-2 focus:ring-copper-400/20 aria-invalid:border-danger;
     }
 
     .tm-select {
-        @apply w-full cursor-pointer appearance-none rounded-md border border-cream-300 bg-white px-3.5 py-3 text-base text-ink-600 transition outline-none focus:border-copper-400 focus:ring-2 focus:ring-copper-400/20 sm:text-sm bg-[url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='14'%20height='14'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23847C70'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M6%209l6%206%206-6'/%3E%3C/svg%3E")] bg-[position:right_10px_center] bg-no-repeat pl-3 pr-7 sm:bg-[position:right_12px_center] sm:px-3.5 sm:pr-8;
+        @apply w-full cursor-pointer appearance-none rounded-md border border-cream-300 bg-white px-3.5 py-3 text-base text-ink-600 transition outline-none focus:border-copper-400 focus:ring-2 focus:ring-copper-400/20 bg-[url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='14'%20height='14'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23847C70'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M6%209l6%206%206-6'/%3E%3C/svg%3E")] bg-[position:right_10px_center] bg-no-repeat pl-3 pr-7 sm:bg-[position:right_12px_center] sm:px-3.5 sm:pr-8;
     }
 
     .tm-error {
@@ -258,7 +271,7 @@
     }
 
     .tm-checkbox {
-        @apply flex cursor-pointer items-start gap-2.5 py-1 text-[13px] leading-snug text-ink-400 select-none;
+        @apply flex cursor-pointer items-start gap-2.5 py-1 text-sm leading-snug text-ink-400 select-none;
     }
 
     .tm-checkbox-box {
@@ -284,12 +297,94 @@
     }
 
     .tm-dropzone {
-        @apply block cursor-pointer rounded-lg border-[1.5px] border-dashed border-cream-400 bg-cream-50 p-6 text-center text-sm text-ink-300 transition hover:border-copper-400 hover:bg-copper-50;
+        @apply relative flex min-h-56 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-[1.5px] border-dashed border-cream-400 bg-cream-50 p-6 text-center text-sm text-ink-300 transition hover:border-copper-400 hover:bg-copper-50;
+    }
+
+    /* Đã chọn ảnh: ảnh lấp khung, ẩn chữ hướng dẫn */
+    .tm-dropzone[data-state] {
+        @apply border-solid border-cream-300 bg-ink-600 p-0 hover:bg-ink-600;
+    }
+
+    .tm-dropzone-preview,
+    .tm-dropzone-status,
+    .tm-dropzone[data-state] .tm-dropzone-empty {
+        display: none;
+    }
+
+    .tm-dropzone[data-state] .tm-dropzone-preview {
+        @apply relative block h-80 w-full;
+    }
+
+    .tm-dropzone-change {
+        @apply absolute top-3 right-3 rounded-full bg-ink-600/60 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm;
+    }
+
+    .tm-dropzone[data-state='scanning'] .tm-dropzone-status,
+    .tm-dropzone[data-state='detected'] .tm-dropzone-status {
+        @apply absolute bottom-4 left-1/2 inline-flex -translate-x-1/2 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap text-white shadow-soft-sm backdrop-blur-sm;
+    }
+
+    .tm-dropzone[data-state='scanning'] .tm-dropzone-status {
+        @apply bg-ink-600/75;
+    }
+
+    .tm-dropzone[data-state='detected'] .tm-dropzone-status {
+        @apply bg-success;
+    }
+
+    .tm-dropzone-spinner,
+    .tm-dropzone-check {
+        display: none;
+    }
+
+    .tm-dropzone[data-state='scanning'] .tm-dropzone-spinner {
+        @apply block size-4 shrink-0 animate-spin rounded-full border-2 border-white/40 border-t-white;
+    }
+
+    .tm-dropzone[data-state='detected'] .tm-dropzone-check {
+        display: block;
+    }
+
+    /* Hiệu ứng quét khuôn mặt */
+    .tm-scan-grid,
+    .tm-scan-line {
+        @apply pointer-events-none absolute inset-x-0 opacity-0 transition-opacity duration-300;
+    }
+
+    .tm-scan-grid {
+        inset-block: 0;
+        background-image:
+            linear-gradient(to right, rgb(218 168 90 / 0.16) 1px, transparent 1px),
+            linear-gradient(to bottom, rgb(218 168 90 / 0.16) 1px, transparent 1px);
+        background-size: 28px 28px;
+    }
+
+    .tm-scan-line {
+        top: 0;
+        height: 30%;
+        border-bottom: 2px solid var(--color-copper-300);
+        background: linear-gradient(to bottom, transparent, rgb(218 168 90 / 0.35));
+        box-shadow: 0 6px 18px rgb(218 168 90 / 0.55);
+        animation: tm-scan 1.8s ease-in-out infinite alternate;
+    }
+
+    .tm-dropzone[data-state='scanning'] :is(.tm-scan-grid, .tm-scan-line) {
+        opacity: 1;
+    }
+
+    @keyframes tm-scan {
+        from {
+            transform: translateY(-100%);
+        }
+
+        to {
+            transform: translateY(240%);
+        }
     }
 
     /* ── Buttons ────────────────────────────────────────────── */
     .tm-btn {
-        @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-sans text-sm font-semibold transition-all duration-200 select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper-300 disabled:pointer-events-none disabled:opacity-50;
+        @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-sans text-sm font-semibold tracking-wide transition-all duration-200 select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper-300 disabled:pointer-events-none disabled:opacity-50;
     }
 
     .tm-btn-sm {
@@ -394,6 +489,71 @@
     .tm-blurred {
         @apply pointer-events-none blur-[5px] select-none;
     }
+
+    /* ── Nội dung bài viết / trang tĩnh (HTML từ RichEditor) ── */
+    .tm-prose {
+        @apply max-w-[760px] text-[17px] leading-[1.75] text-ink-500;
+    }
+
+    .tm-prose > * + * {
+        @apply mt-4;
+    }
+
+    .tm-prose h2 {
+        @apply mt-10 font-serif text-2xl leading-snug font-semibold text-ink-600 sm:text-[28px];
+    }
+
+    .tm-prose h3 {
+        @apply mt-8 font-serif text-xl leading-snug font-semibold text-ink-600;
+    }
+
+    .tm-prose :is(h2, h3) + * {
+        @apply mt-3;
+    }
+
+    .tm-prose a {
+        @apply font-medium text-copper-600 underline decoration-copper-300 underline-offset-[3px] hover:text-copper-700;
+    }
+
+    .tm-prose strong {
+        @apply font-semibold text-ink-600;
+    }
+
+    .tm-prose :is(ul, ol) {
+        @apply flex flex-col gap-2 pl-6;
+    }
+
+    .tm-prose ul {
+        @apply list-disc marker:text-copper-400;
+    }
+
+    .tm-prose ol {
+        @apply list-decimal marker:font-semibold marker:text-copper-600;
+    }
+
+    .tm-prose blockquote {
+        @apply rounded-r-md border-l-2 border-copper-400 bg-copper-50 px-5 py-4 font-serif text-lg text-ink-600 italic;
+    }
+
+    .tm-prose img {
+        @apply h-auto rounded-xl border border-cream-300;
+    }
+
+    .tm-prose hr {
+        @apply my-8 border-cream-300;
+    }
+
+    .tm-prose table {
+        @apply block w-full overflow-x-auto text-base;
+    }
+
+    .tm-prose :is(th, td) {
+        @apply border border-cream-300 px-3 py-2 text-left;
+    }
+
+    .tm-prose th {
+        @apply bg-cream-100 font-semibold text-ink-600;
+    }
 }
 
 @media print {
@@ -443,6 +603,78 @@
     [data-reveal].is-revealed {
         opacity: 1;
         transform: none;
+    }
+
+    /* Lazy loading: khung xương nhấp nháy rồi nội dung hiện dần theo --lazy-delay */
+    .tm-lazy {
+        position: relative;
+    }
+
+    .tm-lazy > * {
+        animation: tm-lazy-content 1.1s var(--ease-out-expo) both;
+        animation-delay: var(--lazy-delay, 300ms);
+    }
+
+    .tm-lazy::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 0.5rem;
+        pointer-events: none;
+        background: linear-gradient(90deg, var(--color-cream-200) 25%, var(--color-cream-100) 50%, var(--color-cream-200) 75%);
+        background-size: 200% 100%;
+        animation:
+            tm-shimmer 1.1s linear infinite,
+            tm-lazy-skeleton 0.6s ease-out forwards;
+        animation-delay: 0s, var(--lazy-delay, 300ms);
+    }
+
+    @keyframes tm-lazy-content {
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+    }
+
+    @keyframes tm-lazy-skeleton {
+        to {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+
+    @keyframes tm-shimmer {
+        to {
+            background-position: -200% 0;
+        }
+    }
+
+    /* Sơ đồ ngũ hành: xoay nửa vòng khi hiện, rồi hành bản mệnh nhấp nháy vài nhịp */
+    .tm-wheel-spin {
+        transform-box: fill-box;
+        transform-origin: center;
+    }
+
+    .tm-wheel-spin {
+        animation: tm-wheel-spin 1.6s var(--ease-out-expo) both;
+        animation-delay: var(--lazy-delay, 0ms);
+    }
+
+    .tm-wheel-blink {
+        animation: tm-wheel-blink 0.8s ease-in-out 3;
+        animation-delay: calc(var(--lazy-delay, 0ms) + 1.6s);
+    }
+
+    @keyframes tm-wheel-spin {
+        from {
+            transform: rotate(-180deg) scale(0.85);
+        }
+    }
+
+    @keyframes tm-wheel-blink {
+        50% {
+            opacity: 0.25;
+        }
     }
 
     /* Accordion */
@@ -506,7 +738,19 @@ body.drawer-open [data-burger] > span:nth-child(3) {
 
     .animate-spin-slow,
     .animate-float,
-    .animate-fade-up {
+    .animate-fade-up,
+    .tm-lazy > *,
+    .tm-wheel-spin,
+    .tm-wheel-blink {
         animation: none;
+    }
+
+    .tm-lazy::after {
+        display: none;
+    }
+
+    .tm-scan-line {
+        animation: none;
+        top: 35%;
     }
 }

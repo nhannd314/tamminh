@@ -14,22 +14,22 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('code', 20)->unique();
-            $table->foreignId('face_analysis_id')->constrained()->restrictOnDelete();
 
-            $table->string('section', 30)->nullable();
+            $table->string('customer_name', 100);
+            $table->string('phone', 32);
+            $table->string('address', 500);
+            $table->text('note')->nullable();
+
+            $table->string('payment_method', 16);
             $table->unsignedInteger('subtotal');
-            $table->unsignedInteger('discount')->default(0);
-            $table->unsignedInteger('amount');
-            $table->string('currency', 3)->default('VND');
+            $table->unsignedInteger('shipping_fee')->default(0);
+            $table->unsignedInteger('total');
 
-            $table->string('status', 20)->default('pending');
-            $table->string('payment_method', 30)->nullable();
+            $table->string('status', 20)->default('new')->index();
             $table->string('transaction_id')->nullable()->index();
             $table->json('payment_payload')->nullable();
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
-
-            $table->index(['face_analysis_id', 'status']);
         });
     }
 

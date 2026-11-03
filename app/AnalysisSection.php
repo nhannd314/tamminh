@@ -6,7 +6,8 @@ use App\Models\Setting;
 
 /**
  * Các phần của bản luận giải, theo thứ tự hiển thị.
- * Tổng quan luôn miễn phí; phần 1-7 có giá lẻ trong settings (`pricing.section.{value}`).
+ * Tổng quan luôn miễn phí; phần 1-7 có giá lẻ trong settings (`pricing.section.{value}`),
+ * phần không có giá (0 hoặc chưa cấu hình) là miễn phí.
  */
 enum AnalysisSection: string
 {
@@ -68,15 +69,39 @@ enum AnalysisSection: string
         return $index === 0 ? null : $index;
     }
 
+    /**
+     * Phần được viết từ ảnh chân dung; ảnh đã xóa thì không viết (và không bán) được nữa.
+     */
+    public function needsPortrait(): bool
+    {
+        return in_array($this, [self::NguHanh, self::ThanKhiSac, self::TamDinh, self::NguQuan, self::ThapNhiCung], true);
+    }
+
     public function isFree(): bool
     {
-        return $this === self::Overview
-            || in_array($this->value, Setting::get('analysis.free_sections', []), true);
+        return $this->price() === 0;
     }
 
     public function price(): int
     {
-        return (int) Setting::get("pricing.section.{$this->value}", 0);
+        if ($this === self::Overview) {
+            return 0;
+        }
+
+        return max(0, (int) Setting::get("pricing.section.{$this->value}", 0));
+    }
+
+    /**
+     * Giá phần này khi nằm trong trọn gói (đã trừ chiết khấu trọn gói).
+     */
+    public function bundledPrice(): int
+    {
+        return intdiv($this->price() * (100 - self::fullPackageDiscountPercent()), 100);
+    }
+
+    public static function fullPackageDiscountPercent(): int
+    {
+        return min(100, max(0, (int) Setting::get('pricing.full_package_discount_percent', 0)));
     }
 
     /**

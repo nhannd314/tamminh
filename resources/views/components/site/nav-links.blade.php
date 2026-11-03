@@ -6,11 +6,11 @@
 @php
     $links = [
         ['label' => 'Trang chủ', 'href' => url('/'), 'active' => request()->is('/')],
-        ['label' => 'Xem tướng số', 'href' => '#', 'active' => false],
-        ['label' => 'Xem chỉ tay', 'href' => '#', 'active' => false],
-        ['label' => 'Kiến thức phong thủy', 'href' => '#', 'active' => false],
-        ['label' => 'Chuyên gia', 'href' => '#', 'active' => false],
-        ['label' => 'Liên hệ', 'href' => '#', 'active' => false],
+        ['label' => 'Xem tướng số', 'href' => url('/#xem-tuong'), 'active' => request()->routeIs('analyses.*')],
+        ['label' => 'Xem chỉ tay', 'href' => url('/#xem-chi-tay'), 'active' => false],
+        ['label' => 'Sản phẩm phong thủy', 'href' => route('products.index'), 'active' => request()->routeIs('products.*')],
+        ['label' => 'Kiến thức', 'href' => route('posts.index'), 'active' => request()->routeIs('posts.*')],
+        ['label' => 'Liên hệ', 'href' => route('pages.show', 'lien-he'), 'active' => request()->is('lien-he')],
     ];
 @endphp
 

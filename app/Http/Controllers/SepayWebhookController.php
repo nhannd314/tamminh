@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnalysisOrder;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -28,8 +29,24 @@ class SepayWebhookController extends Controller
             return $this->ok();
         }
 
-        $code = Order::findCodeIn($request->input('code').' '.$request->input('content'));
-        $order = $code ? Order::query()->firstWhere('code', $code) : null;
+        $text = $request->input('code').' '.$request->input('content');
+
+        // Đơn vật phẩm (DH…) được kiểm tra trước, còn lại là đơn mở khoá xem tướng (TM…).
+        $productOrderCode = Order::findCodeIn($text);
+        $productOrder = $productOrderCode ? Order::query()->firstWhere('code', $productOrderCode) : null;
+
+        if ($productOrder !== null) {
+            if ((int) $request->input('transferAmount') < $productOrder->total) {
+                Log::warning("SePay: đơn {$productOrder->code} chuyển thiếu tiền", $request->only('id', 'content', 'transferAmount'));
+            } else {
+                $productOrder->markAsPaid('sepay:'.$request->input('id'), $request->all());
+            }
+
+            return $this->ok();
+        }
+
+        $code = AnalysisOrder::findCodeIn($text);
+        $order = $code ? AnalysisOrder::query()->firstWhere('code', $code) : null;
 
         if ($order === null) {
             Log::info('SePay: giao dịch không khớp đơn nào', $request->only('id', 'content', 'transferAmount'));

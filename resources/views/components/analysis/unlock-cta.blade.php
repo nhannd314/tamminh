@@ -1,5 +1,6 @@
 {{--
-    Nút mở khoá một phần luận giải: gửi form tạo đơn chờ thanh toán.
+    Nút mở khoá một phần luận giải: tạo đơn chờ thanh toán và mở cửa sổ chuyển khoản tại chỗ (data-unlock-form).
+    Phần cần ảnh mà ảnh chân dung đã bị xóa (quá hạn lưu trữ) thì hiện thông báo thay cho nút.
     Usage: <x-analysis.unlock-cta :analysis="$analysis" :section="$type" :price="49000" />
 --}}
 @props([
@@ -8,7 +9,13 @@
     'price',
 ])
 
-<form method="POST" action="{{ route('analyses.unlock', $analysis) }}" data-print-hidden
+@if (! $analysis->canGenerate($section))
+    <div {{ $attributes->class('flex items-start gap-3 rounded-lg border border-cream-300 bg-cream-100 p-4 text-sm text-ink-500 sm:p-5') }}>
+        <x-ui.icon name="clock" :size="18" class="mt-0.5 shrink-0 text-copper-500" />
+        <p>Ảnh chân dung đã được tự động xóa sau {{ \App\Models\FaceAnalysis::PORTRAIT_RETENTION_DAYS }} ngày nên không thể luận giải thêm phần này. Bạn có thể tạo lượt xem mới với ảnh mới.</p>
+    </div>
+@else
+<form method="POST" action="{{ route('analyses.unlock', $analysis) }}" data-unlock-form data-print-hidden
     {{ $attributes->class('flex flex-col items-center gap-4 rounded-lg border border-copper-200 bg-copper-50 p-4 text-center sm:flex-row sm:justify-between sm:p-5 sm:text-left') }}>
     @csrf
     <input type="hidden" name="section" value="{{ $section->value }}" />
@@ -24,3 +31,4 @@
         Mở khóa · <x-analysis.price :amount="$price" />
     </x-ui.button>
 </form>
+@endif

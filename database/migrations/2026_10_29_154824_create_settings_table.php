@@ -21,17 +21,14 @@ return new class extends Migration
         });
 
         $defaults = [
-            'pricing.section.ngu_hanh' => [49000, 'Giá lẻ phần 1 - Ngũ hành tướng pháp (VNĐ)'],
-            'pricing.section.than_khi_sac' => [49000, 'Giá lẻ phần 2 - Thần - Khí - Sắc (VNĐ)'],
-            'pricing.section.tam_dinh' => [49000, 'Giá lẻ phần 3 - Tam đình (VNĐ)'],
-            'pricing.section.ngu_quan' => [49000, 'Giá lẻ phần 4 - Ngũ quan (VNĐ)'],
-            'pricing.section.thap_nhi_cung' => [69000, 'Giá lẻ phần 5 - Thập nhị cung (VNĐ)'],
-            'pricing.section.phong_thuy' => [49000, 'Giá lẻ phần 6 - Phong thủy cải vận (VNĐ)'],
-            'pricing.section.advice' => [39000, 'Giá lẻ phần 7 - Lời khuyên (VNĐ)'],
-            'pricing.full_package' => [199000, 'Giá trọn gói, mở toàn bộ các phần (VNĐ)'],
-            'pricing.upgrade_credit_percent' => [50, 'Khi lên trọn gói: được trừ bao nhiêu % số tiền đã mua lẻ'],
-            'analysis.free_sections' => [['ngu_hanh'], 'Các phần miễn phí ngoài Tổng quan'],
-        ];
+            'pricing.section.ngu_hanh' => [0, 'Giá lẻ phần 1 - Ngũ hành tướng pháp (VNĐ, 0 = miễn phí)'],
+            'pricing.section.than_khi_sac' => [20000, 'Giá lẻ phần 2 - Thần - Khí - Sắc (VNĐ, 0 = miễn phí)'],
+            'pricing.section.tam_dinh' => [20000, 'Giá lẻ phần 3 - Tam đình (VNĐ, 0 = miễn phí)'],
+            'pricing.section.ngu_quan' => [20000, 'Giá lẻ phần 4 - Ngũ quan (VNĐ, 0 = miễn phí)'],
+            'pricing.section.thap_nhi_cung' => [20000, 'Giá lẻ phần 5 - Thập nhị cung (VNĐ, 0 = miễn phí)'],
+            'pricing.section.phong_thuy' => [20000, 'Giá lẻ phần 6 - Phong thủy cải vận (VNĐ, 0 = miễn phí)'],
+            'pricing.section.advice' => [20000, 'Giá lẻ phần 7 - Lời khuyên (VNĐ, 0 = miễn phí)'],
+            'pricing.full_package_discount_percent' => [20, 'Chiết khấu trọn gói (%) trên tổng giá lẻ các phần có phí'],        ];
 
         DB::table('settings')->insert(collect($defaults)->map(fn (array $setting, string $key): array => [
             'key' => $key,

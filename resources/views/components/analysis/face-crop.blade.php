@@ -3,6 +3,7 @@
     Có ảnh cắt sẵn (FaceDetector) thì dùng ảnh đó; `tight` phóng to thêm để khuôn mặt
     (chân tóc → cằm) lấp gần đầy khung, hợp với ảnh tròn nhỏ.
     Chưa có số đo thì cắt bằng CSS theo `box` = [x, y, w, h] tính theo % ảnh gốc.
+    Ảnh đã bị xóa (quá hạn lưu trữ) thì chỉ còn khung nền trống.
 
     Usage: <x-analysis.face-crop :analysis="$analysis" tight class="size-32 rounded-full" />
 --}}
@@ -28,9 +29,9 @@
         $positionY = $h >= 100 ? 50 : round($y / (100 - $h) * 100, 2);
     }
 
-    $style = $analysis->face_crop_path && $lines
+    $style = ! $analysis->hasPortrait() ? '' : ($analysis->face_crop_path && $lines
         ? sprintf('background-image: url(%s); background-size: %s%%; background-position: 50%% %s%%;', $url, $size, $positionY)
-        : sprintf('background-image: url(%s); background-size: %s%% %s%%; background-position: %s%% %s%%;', $url, round(10000 / $w, 2), $size, $w >= 100 ? 50 : round($x / (100 - $w) * 100, 2), $positionY);
+        : sprintf('background-image: url(%s); background-size: %s%% %s%%; background-position: %s%% %s%%;', $url, round(10000 / $w, 2), $size, $w >= 100 ? 50 : round($x / (100 - $w) * 100, 2), $positionY));
 @endphp
 
 <div role="img" aria-label="Khuôn mặt của {{ $analysis->name }}" style="{{ $style }}" {{ $attributes->class('shrink-0 bg-cream-200 bg-no-repeat') }}></div>

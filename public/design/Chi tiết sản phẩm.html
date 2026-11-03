@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Tỳ hưu bạc - Vật phẩm phong thủy | Tâm Minh</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Manrope:wght@300;400;500;600;700;800&display=swap"/>
+
+  <!-- AOS - Animate On Scroll -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontSize: {
+            xs:['0.75rem',{lineHeight:'1rem'}], sm:['0.875rem',{lineHeight:'1.25rem'}], base:['1rem',{lineHeight:'1.5rem'}],
+            lg:['1.125rem',{lineHeight:'1.75rem'}], xl:['1.25rem',{lineHeight:'1.75rem'}], '2xl':['1.5rem',{lineHeight:'2rem'}],
+            '3xl':['1.875rem',{lineHeight:'2.25rem'}], '4xl':['2.25rem',{lineHeight:'2.5rem'}], '5xl':['3rem',{lineHeight:'1.15'}],
+            '6xl':['3.75rem',{lineHeight:'1.1'}], '7xl':['4.5rem',{lineHeight:'1'}], '8xl':['6rem',{lineHeight:'1'}],
+          },
+          
+          colors: {
+            copper: { 50:'#FBF4E5',100:'#F4E2BC',200:'#E9C886',300:'#DAA85A',400:'#C89544',500:'#B6822F',600:'#946821',700:'#6E4D17' },
+            navy:   { 50:'#EAEEF5',100:'#C5CFE0',200:'#8898BA',300:'#4D6592',400:'#25446F',500:'#15325E',600:'#112A4F',700:'#0B1E3C' },
+            cream:  { 50:'#FDFBF6',100:'#FAF6EC',200:'#F2EBD8',300:'#E8DCC0',400:'#C9B68C' },
+            ink:    { 100:'#DCD6CA',200:'#B6AEA0',300:'#847C70',400:'#565049',500:'#2C2924',600:'#1A1814' },
+          },
+          fontFamily: {
+            serif: ['Lora','Georgia','serif'],
+            sans:  ['Manrope','system-ui','-apple-system','sans-serif'],
+          },
+          maxWidth: { content: '1320px' },
+          boxShadow: {
+            'soft-sm':'0 2px 6px rgba(70,50,20,0.06)',
+            'soft-md':'0 8px 24px rgba(70,50,20,0.08)',
+            'soft-lg':'0 20px 48px rgba(70,50,20,0.10)',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Manrope', system-ui, sans-serif; }
+    ::selection { background: #F4E2BC; color: #1A1814; }
+
+    /* ---------- Scroll reveal (AOS-driven) ---------- */
+    .reveal:not(.aos-init) { opacity: 0; }
+    [data-aos] { pointer-events: none; }
+    [data-aos].aos-animate { pointer-events: auto; }
+    @media (prefers-reduced-motion: reduce) { .reveal:not(.aos-init) { opacity: 1; } }
+
+    /* ---------- Hero entrance ---------- */
+    @keyframes fade-up { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform:none; } }
+    .anim-fade-up { animation: fade-up .9s cubic-bezier(.16,1,.3,1) both; }
+
+    /* ---------- Decorative motion ---------- */
+    @keyframes spin-slow { to { transform: rotate(360deg); } }
+    .spin-slow { animation: spin-slow 28s linear infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    .float { animation: float 5.5s ease-in-out infinite; }
+    @keyframes pulse-ring { 0%,100% { box-shadow: 0 0 0 0 rgba(200,149,68,.35); } 50% { box-shadow: 0 0 0 7px rgba(200,149,68,0); } }
+    .pulse-ring { animation: pulse-ring 2.6s ease-out infinite; }
+
+    /* ---------- FAQ accordion ---------- */
+    .faq-ans { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .34s cubic-bezier(.16,1,.3,1); }
+    .faq-item.open .faq-ans { grid-template-rows: 1fr; }
+    .faq-ans > div { overflow: hidden; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+
+    /* ---------- Mobile drawer ---------- */
+    body.drawer-open { overflow: hidden; }
+    /* ID specificity beats Tailwind's translate-x-full class — reliable open/close */
+    #drawer { transform: translateX(100%); transition: transform .3s cubic-bezier(.16,1,.3,1); }
+    body.drawer-open #drawer { transform: translateX(0); }
+    #scrim { transition: opacity .3s; }
+    body.drawer-open #scrim { opacity: 1; pointer-events: auto; }
+
+    /* ---------- Hero background ---------- */
+    .hero-bg {
+      background-color: #fdf7f0;
+      background-image: url('assets/hero-mountains.png');
+      background-repeat: no-repeat;
+      background-position: bottom right;
+      background-size: auto 520px;
+    }
+    @media (max-width: 1024px) { .hero-bg { background-size: auto 320px; } }
+    @media (max-width: 720px)  { .hero-bg { background-size: auto 200px; } }
+
+    select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23847C70' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+  </style>
+
+    <style id="om-tokens">
+  :root{--text-xs:.75rem;--text-sm:.875rem;--text-base:1rem;--text-lg:1.125rem;--text-xl:1.25rem;--text-2xl:1.5rem;--text-3xl:1.875rem;--text-4xl:2.25rem;--text-5xl:3rem;--space-card:1.75rem;--radius-card:.75rem}
+  html{font-size:16px}
+  </style>
+
+<style type="text/tailwindcss">
+  @layer components {
+
+    /* ── Layout ─────────────────────────────────────────────────────── */
+    .tm-container { @apply mx-auto max-w-content px-4 sm:px-6; }
+
+    /* ── Section heading ─────────────────────────────────────────────── */
+    .tm-sh-wrap { @apply mx-auto flex flex-col items-center gap-4 text-center; }
+    .tm-sh-rule { @apply block h-0.5 w-14 bg-copper-400; }
+
+    /* ── Eyebrow pill ────────────────────────────────────────────────── */
+    .tm-eyebrow { @apply inline-flex items-center gap-1.5 rounded-full border border-copper-200 bg-copper-50 px-4 py-2 font-sans text-sm font-semibold uppercase tracking-[0.14em] text-copper-700; }
+
+    /* ── Cards ───────────────────────────────────────────────────────── */
+    .tm-card      { @apply relative flex flex-col gap-3.5 rounded-xl border border-cream-300 bg-white p-7 shadow-soft-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-copper-200 hover:shadow-soft-md; }
+    .tm-card-cream{ @apply bg-cream-50; }
+    .tm-card-num  { @apply absolute right-6 top-5 font-serif text-3xl tracking-[0.2em] text-copper-400; }
+    .tm-card-title{ @apply font-serif text-xl font-semibold leading-tight text-ink-600 sm:text-2xl; }
+    .tm-card-desc { @apply text-sm leading-relaxed text-ink-300; }
+
+    /* ── Box (no hover) ──────────────────────────────────────────────── */
+    .tm-box      { @apply rounded-2xl border border-cream-300 bg-white p-6 shadow-soft-sm; }
+    .tm-box-flat { @apply rounded-xl border border-cream-300 bg-white p-7 shadow-soft-sm; }
+
+    /* ── Form ────────────────────────────────────────────────────────── */
+    .tm-form        { @apply rounded-[10px] border border-cream-300 bg-white p-6 shadow-soft-md sm:p-8; }
+    .tm-form-header { @apply mb-5 border-b border-cream-300 pb-[18px] font-sans text-sm font-semibold uppercase tracking-[0.14em] text-ink-600; }
+    .tm-field       { @apply flex flex-col gap-1.5; }
+    .tm-label       { @apply text-sm font-medium text-ink-500; }
+
+    /* ── Form controls ───────────────────────────────────────────────── */
+    .tm-input  { @apply w-full rounded-md border border-cream-300 bg-white px-3.5 py-3 text-sm text-ink-600 outline-none transition placeholder:text-ink-200 focus:border-copper-400 focus:ring-2 focus:ring-copper-400/20; }
+    .tm-select { @apply w-full rounded-md border border-cream-300 bg-white px-3.5 py-3 text-sm text-ink-600 outline-none transition focus:border-copper-400; }
+    .tm-radio  { @apply h-4 w-4 cursor-pointer accent-copper-400; }
+    .tm-check  { @apply h-3.5 w-3.5 cursor-pointer accent-copper-400; }
+
+    /* ---------- Pill radio (gender) ---------- */
+    .tm-gender { display:inline-flex; align-items:center; gap:.55rem; cursor:pointer; padding:.35rem .25rem; font-size:0.875rem; line-height:1; color:#565049; transition:color .18s; user-select:none; }
+    .tm-gender input { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+    .tm-gender-dot { position:relative; width:17px; height:17px; flex-shrink:0; border-radius:9999px; border:1.5px solid #C9B68C; transition:border-color .18s; }
+    .tm-gender:hover .tm-gender-dot { border-color:#DAA85A; }
+    .tm-gender:has(input:checked) { color:#6E4D17; font-weight:600; }
+    .tm-gender:has(input:checked) .tm-gender-dot { border-color:#B6822F; }
+    .tm-gender:has(input:checked) .tm-gender-dot::after { content:''; position:absolute; inset:3px; border-radius:9999px; background:#B6822F; }
+    .tm-gender:has(input:focus-visible) .tm-gender-dot { outline:2px solid #DAA85A; outline-offset:2px; }
+    .tm-radio-card input { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+    .tm-radio-card .tm-gender-dot { margin-top:1px; }
+    .tm-radio-card:hover .tm-gender-dot { border-color:#DAA85A; }
+    .tm-radio-card:has(input:checked) .tm-gender-dot { border-color:#B6822F; }
+    .tm-radio-card:has(input:checked) .tm-gender-dot::after { content:''; position:absolute; inset:3px; border-radius:9999px; background:#B6822F; }
+    .tm-radio-card:has(input:focus-visible) .tm-gender-dot { outline:2px solid #DAA85A; outline-offset:2px; }
+
+    /* ── Buttons ─────────────────────────────────────────────────────── */
+    /* Base — always pair with a variant */
+    .tm-btn       { @apply inline-flex cursor-pointer select-none items-center justify-center gap-2 rounded-md font-sans text-sm font-semibold transition-all duration-200 focus:outline-none; }
+    .tm-btn-block { @apply w-full justify-center px-7 py-4; }
+    .tm-btn-sm    { @apply px-3.5 py-2 text-sm; }
+    .tm-btn-md    { @apply px-5 py-3; }
+    .tm-btn-circle{ @apply h-[38px] w-[38px] rounded-full p-0; }
+    .tm-btn-pill  { @apply rounded-full; }
+    /* Variants */
+    .tm-btn-copper  { @apply bg-copper-400 text-white shadow-soft-sm hover:bg-copper-500 active:scale-[0.97]; }
+    .tm-btn-navy    { @apply bg-navy-500 text-cream-50 shadow-soft-sm hover:bg-navy-600 active:scale-[0.97]; }
+    .tm-btn-ghost   { @apply bg-transparent px-3 py-2 text-ink-400 hover:bg-cream-200; }
+    .tm-btn-outline { @apply border border-copper-300 bg-transparent text-copper-700 hover:border-copper-400 hover:bg-copper-400 hover:text-white; }
+
+    /* ── Atoms ───────────────────────────────────────────────────────── */
+    .tm-ring        { @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-[1.5px] border-copper-400 text-copper-400 transition-colors duration-300 group-hover:bg-copper-50 sm:h-14 sm:w-14; }
+    .tm-glyph       { @apply flex shrink-0 items-center justify-center rounded-lg border border-copper-200 bg-copper-50 font-serif font-semibold text-copper-700; }
+    .tm-glyph-navy  { @apply flex shrink-0 items-center justify-center rounded-lg bg-navy-500 font-serif font-semibold text-copper-400; }
+    .tm-social-btn  { @apply flex h-[38px] w-[38px] items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.06] text-white/70 transition-all duration-200 hover:-translate-y-0.5 hover:border-copper-400 hover:bg-copper-400 hover:text-white; }
+  }
+  </style>
+
+  <style id="om-components-size">
+  .tm-card-num{font-size:var(--text-3xl)}.tm-card-title{font-size:var(--text-xl)}@media (min-width:640px){.tm-card-title{font-size:var(--text-2xl)}}.tm-card-desc{font-size:var(--text-base)}.tm-eyebrow{font-size:var(--text-sm)}
+  </style>
+<style type="text/tailwindcss">
+  @layer components {
+    .rs-num { @apply flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-copper-400 font-serif text-base font-semibold text-white; }
+    .rs-tag { @apply rounded-full bg-copper-400 px-3 py-1 text-xs font-semibold text-white shadow-soft-sm; }
+    .rs-tag-o { @apply rounded-full border border-cream-300 bg-white px-3 py-1 text-xs font-semibold text-ink-400; }
+    .rs-h3 { @apply m-0 mb-3 font-sans text-base font-semibold text-ink-600; }
+    .rs-list { @apply m-0 flex list-none flex-col gap-2 p-0 text-base leading-relaxed text-ink-500; }
+    .rs-list li { @apply relative pl-4; }
+    .rs-list li::before { content:''; @apply absolute left-0 top-[0.7em] h-1.5 w-1.5 rounded-full bg-copper-400; }
+    .rs-list b { @apply font-semibold text-copper-700; }
+    .rs-toc { @apply flex items-center gap-3 rounded-md px-2.5 py-2.5 text-sm text-ink-500 transition-colors hover:bg-cream-100 hover:text-ink-600; }
+    .rs-toc-n { @apply flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border border-cream-300 text-xs font-semibold text-ink-300; }
+    .rs-toc.active { @apply bg-copper-50 font-semibold text-copper-700; }
+    .rs-toc.active .rs-toc-n { @apply border-copper-400 bg-copper-400 text-white; }
+  }
+  </style>
+  <script src="src/image-slot.js"></script>
+<style>.zalo-btn{background:#0068FF}.zalo-btn:hover{background:#0054D1}a{color:inherit}a:hover{color:inherit}</style>
+<style>.fs-chip[aria-pressed="true"]{background:#15325E;border-color:#15325E;color:#FDFBF6}.fs-chip[aria-pressed="true"] .fs-dot{box-shadow:0 0 0 2px #FDFBF6}#fs-cat::-webkit-scrollbar{display:none}</style>
+<style>.pd-opt[aria-pressed="true"]{border-color:#B6822F;background:#FBF4E5;color:#6E4D17}.pd-th[aria-current="true"]{outline:2px solid #B6822F;outline-offset:2px}.pd-tab[aria-selected="true"]{color:#1A1814;border-color:#C89544}.pd-panel[hidden]{display:none}</style>
+</head>
+
+<body class="bg-cream-100 text-ink-500 antialiased">
+
+  <!-- ============================ HEADER ============================ -->
+  <header id="hdr" class="sticky top-0 z-50 border-b border-cream-300 bg-white/95 backdrop-blur transition-shadow duration-300">
+    <div class="mx-auto flex max-w-content items-center gap-5 px-4 py-3.5 sm:px-6">
+      <a href="Trang chủ (Tailwind).html" class="flex flex-shrink-0 items-center gap-3">
+        <img src="assets/logo-mark.svg" alt="Tâm Minh" class="h-11 w-11 sm:h-12 sm:w-12"/>
+        <span class="leading-none">
+          <span class="block font-serif text-xl font-semibold text-ink-600 sm:text-2xl">Tâm Minh</span>
+          <span class="mt-1 hidden text-xs tracking-wide text-ink-300 sm:block">Hiểu mình - An tâm sống</span>
+        </span>
+      </a>
+
+      <nav id="topnav" class="hidden flex-1 justify-center gap-[18px] lg:flex"></nav>
+
+      <a href="#" data-toast="Mở chương trình affiliate - đăng ký nhận hoa hồng mỗi lượt giới thiệu."
+         class="tm-btn tm-btn-copper tm-btn-sm hidden flex-shrink-0 sm:inline-flex">
+        <span data-ic="sparkle" data-sz="14"></span>
+        <span class="hidden xl:inline">Kiếm tiền affiliate</span>
+      </a>
+
+      <button data-toast="Mở cửa sổ đăng nhập…" aria-label="Đăng nhập" title="Đăng nhập" class="tm-btn tm-btn-ghost tm-btn-circle !p-0 bg-cream-200 hover:bg-cream-300 hidden flex-shrink-0 lg:inline-flex">
+        <span class="text-ink-500" data-ic="user" data-sz="20"></span>
+      </button>
+
+      <button id="burger" aria-label="Mở menu" aria-expanded="false"
+              class="ml-auto flex h-10 w-10 flex-shrink-0 flex-col items-center justify-center gap-[5px] rounded-md border border-cream-300 hover:border-copper-400 lg:hidden">
+        <span class="block h-[1.5px] w-[18px] rounded bg-ink-600 transition-transform duration-300"></span>
+        <span class="block h-[1.5px] w-[18px] rounded bg-ink-600 transition-opacity duration-300"></span>
+        <span class="block h-[1.5px] w-[18px] rounded bg-ink-600 transition-transform duration-300"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile drawer -->
+  <div id="scrim" class="fixed inset-0 z-[60] bg-ink-600/45 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"></div>
+  <aside id="drawer" class="fixed inset-y-0 right-0 z-[70] flex w-[min(340px,88vw)] flex-col overflow-y-auto bg-white shadow-soft-lg lg:hidden">
+    <div class="flex items-center justify-between border-b border-cream-300 px-6 py-5">
+      <span class="font-sans text-xs font-bold uppercase tracking-[0.16em] text-copper-700">Menu</span>
+      <button id="drawer-close" aria-label="Đóng menu" class="flex h-8 w-8 items-center justify-center rounded-md text-ink-300 hover:bg-cream-100 hover:text-ink-600">
+        <span data-ic="x" data-sz="20"></span>
+      </button>
+    </div>
+    <nav id="drawernav" class="flex-1 py-3"></nav>
+    <div class="flex flex-col gap-3 border-t border-cream-300 px-6 pb-6 pt-4">
+      <a href="#" data-toast="Mở chương trình affiliate." class="tm-btn tm-btn-copper tm-btn-sm w-max">
+        <span data-ic="sparkle" data-sz="14"></span> Kiếm tiền affiliate
+      </a>
+      <button data-toast="Mở cửa sổ đăng nhập…" class="tm-btn tm-btn-navy tm-btn-md gap-2.5 text-sm tracking-wide">
+        <span class="text-copper-400" data-ic="user" data-sz="18"></span> Đăng nhập
+      </button>
+    </div>
+  </aside>
+
+  <main id="top" class="overflow-x-clip">
+<div class="mx-auto max-w-content px-4 pb-28 pt-6 sm:px-6 lg:pb-16">
+<nav aria-label="Breadcrumb" class="mb-6 flex flex-wrap items-center gap-1.5 text-sm text-ink-300"><a href="Trang chủ (Tailwind).html" class="hover:text-copper-600">Trang chủ</a><span data-ic="chevron" data-sz="14"></span><a href="Vật phẩm phong thủy.html" class="hover:text-copper-600">Vật phẩm phong thủy</a><span data-ic="chevron" data-sz="14"></span><a href="Vật phẩm phong thủy.html" class="hover:text-copper-600">Linh vật</a><span data-ic="chevron" data-sz="14"></span><span class="font-medium text-ink-600">Tỳ hưu bạc</span></nav>
+<div class="grid items-start gap-8 md:grid-cols-2 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-12">
+<div class="flex flex-col gap-3 md:sticky md:top-24">
+<div class="relative overflow-hidden rounded-2xl border border-cream-300 bg-white"><image-slot id="pd-main-1" placeholder="Ảnh chính Tỳ hưu bạc" class="pd-main block aspect-square w-full"></image-slot><image-slot id="pd-main-2" placeholder="Ảnh 2 Tỳ hưu bạc" class="pd-main hidden aspect-square w-full"></image-slot><image-slot id="pd-main-3" placeholder="Ảnh 3 Tỳ hưu bạc" class="pd-main hidden aspect-square w-full"></image-slot><image-slot id="pd-main-4" placeholder="Ảnh 4 Tỳ hưu bạc" class="pd-main hidden aspect-square w-full"></image-slot><span class="pointer-events-none absolute left-4 top-4 rounded-full bg-navy-500 px-3 py-1.5 text-sm font-semibold text-cream-50">Bán chạy</span></div>
+<div class="grid grid-cols-4 gap-3"><button type="button" class="pd-th block overflow-hidden rounded-lg border border-cream-300" data-i="1" aria-current="true" aria-label="Ảnh 1"><image-slot id="pd-th-1" placeholder="Ảnh 1" class="pointer-events-none block aspect-square w-full"></image-slot></button><button type="button" class="pd-th block overflow-hidden rounded-lg border border-cream-300" data-i="2" aria-current="false" aria-label="Ảnh 2"><image-slot id="pd-th-2" placeholder="Ảnh 2" class="pointer-events-none block aspect-square w-full"></image-slot></button><button type="button" class="pd-th block overflow-hidden rounded-lg border border-cream-300" data-i="3" aria-current="false" aria-label="Ảnh 3"><image-slot id="pd-th-3" placeholder="Ảnh 3" class="pointer-events-none block aspect-square w-full"></image-slot></button><button type="button" class="pd-th block overflow-hidden rounded-lg border border-cream-300" data-i="4" aria-current="false" aria-label="Ảnh 4"><image-slot id="pd-th-4" placeholder="Ảnh 4" class="pointer-events-none block aspect-square w-full"></image-slot></button></div>
+</div>
+<div class="flex min-w-0 flex-col">
+<div class="flex flex-wrap items-center gap-3 text-sm"><span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-cream-300 bg-white px-3 py-1 font-medium text-ink-500"><span class="h-2.5 w-2.5 rounded-full" style="background:#C9B68C"></span>Hợp mệnh Kim</span><span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-cream-300 bg-white px-3 py-1 font-medium text-ink-500"><span class="h-2.5 w-2.5 rounded-full" style="background:#25446F"></span>Hợp mệnh Thủy</span><span class="text-ink-300">Mã: TH-B925</span></div>
+<h1 class="m-0 mt-4 font-serif text-3xl font-semibold leading-tight text-ink-600 sm:text-4xl">Tỳ hưu bạc S925 khai quang</h1>
+<div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-base"><span class="flex gap-0.5 text-copper-400"><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span></span><span class="font-semibold text-ink-600">4.9</span><a href="#pd-reviews" class="text-ink-400 underline-offset-2 hover:text-copper-600 hover:underline">86 đánh giá</a><span class="text-ink-200">·</span><span class="text-ink-400">Đã bán 420</span></div>
+<div class="mt-5 flex items-baseline gap-3"><span id="pd-price" class="font-serif text-3xl font-semibold text-copper-600">1.290.000đ</span><span id="pd-old" class="text-lg text-ink-300 line-through">1.590.000đ</span></div><div id="pd-sub" class="mt-1 hidden text-base text-ink-400">Tạm tính: <span class="font-semibold text-ink-600"></span></div>
+<p class="m-0 mt-4 text-base leading-relaxed text-ink-500" style="text-wrap:pretty">Tỳ hưu đúc bạc nguyên khối, miệng rộng bụng to – tượng trưng cho việc thu tài mà không thất thoát. Được Thầy Minh Quang khai quang theo ngày giờ hợp tuổi người nhận.</p>
+<div class="mt-6 flex flex-col gap-5 border-t border-cream-300 pt-6">
+<div><div class="mb-2.5 text-base font-semibold text-ink-600">Kích thước</div><div class="flex flex-wrap gap-2"><button type="button" class="pd-opt rounded-md border border-cream-300 bg-white px-4 py-2.5 text-base font-medium text-ink-500 transition-colors hover:border-copper-300" data-g="size" data-v="1290000" aria-pressed="true">Nhỏ · 3cm</button><button type="button" class="pd-opt rounded-md border border-cream-300 bg-white px-4 py-2.5 text-base font-medium text-ink-500 transition-colors hover:border-copper-300" data-g="size" data-v="1890000" aria-pressed="false">Vừa · 5cm</button><button type="button" class="pd-opt rounded-md border border-cream-300 bg-white px-4 py-2.5 text-base font-medium text-ink-500 transition-colors hover:border-copper-300" data-g="size" data-v="2990000" aria-pressed="false">Lớn · 8cm</button></div></div>
+<div><div class="mb-2.5 text-base font-semibold text-ink-600">Kiểu dáng</div><div class="flex flex-wrap gap-2"><button type="button" class="pd-opt rounded-md border border-cream-300 bg-white px-4 py-2.5 text-base font-medium text-ink-500 transition-colors hover:border-copper-300" data-g="type" data-v="0" aria-pressed="true">Mặt dây chuyền</button><button type="button" class="pd-opt rounded-md border border-cream-300 bg-white px-4 py-2.5 text-base font-medium text-ink-500 transition-colors hover:border-copper-300" data-g="type" data-v="0" aria-pressed="false">Tượng để bàn</button></div></div>
+<div><div class="mb-2.5 text-base font-semibold text-ink-600">Khắc tên (miễn phí)</div><input id="pd-engrave" maxlength="12" placeholder="Tối đa 12 ký tự" class="tm-input max-w-[320px] !text-base"/></div>
+<div class="flex flex-wrap items-center gap-3"><div class="flex h-12 items-center rounded-md border border-cream-300 bg-white"><button type="button" id="pd-minus" aria-label="Giảm" class="flex h-full w-12 items-center justify-center text-xl text-ink-400 hover:text-copper-600">−</button><span id="pd-qty" class="w-10 text-center text-base font-semibold text-ink-600">1</span><button type="button" id="pd-plus" aria-label="Tăng" class="flex h-full w-12 items-center justify-center text-ink-400 hover:text-copper-600"><span data-ic="plus" data-sz="18"></span></button></div><span class="text-sm text-ink-300">Còn 14 sản phẩm</span></div>
+<div class="hidden gap-3 sm:grid sm:grid-cols-2"><button type="button" id="pd-add" class="tm-btn tm-btn-outline h-12 !text-base"><span data-ic="plus" data-sz="18"></span>Thêm vào giỏ</button><button type="button" data-toast="Chuyển tới trang thanh toán…" class="tm-btn tm-btn-copper h-12 !text-base">Mua ngay</button></div>
+<a href="https://zalo.me/0888112626" target="_blank" rel="noopener" class="flex items-center gap-3 rounded-xl border border-cream-300 bg-cream-50 p-4 transition-colors hover:border-copper-300"><span class="zalo-btn flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.5 1.4 4.7 3.7 6.2L5 21l3.8-1.6c1 .3 2.1.5 3.2.5 5.5 0 10-3.6 10-8s-4.5-8.9-10-8.9z"/></svg></span><span class="min-w-0 flex-1"><span class="block text-base font-semibold text-ink-600">Chưa chắc hợp mệnh?</span><span class="block text-sm text-ink-400">Nhắn Zalo để Thầy tư vấn theo năm sinh – miễn phí</span></span><span class="text-ink-300" data-ic="chevron" data-sz="18"></span></a>
+</div>
+<ul class="m-0 mt-6 grid list-none gap-3 border-t border-cream-300 p-0 pt-6 text-base text-ink-500 sm:grid-cols-2">
+<li class="flex items-center gap-2.5"><span class="text-copper-600" data-ic="badge" data-sz="20"></span>Khai quang trước khi giao</li>
+<li class="flex items-center gap-2.5"><span class="text-copper-600" data-ic="shield" data-sz="20"></span>Bạc S925 có kiểm định</li>
+<li class="flex items-center gap-2.5"><span class="text-copper-600" data-ic="send" data-sz="20"></span>Giao toàn quốc 2–4 ngày</li>
+<li class="flex items-center gap-2.5"><span class="text-copper-600" data-ic="check" data-sz="20"></span>Đổi trả trong 7 ngày</li>
+</ul>
+</div></div>
+<section class="mt-12 rounded-2xl border border-cream-300 bg-white shadow-soft-sm">
+<div role="tablist" class="flex gap-6 overflow-x-auto border-b border-cream-300 px-6 sm:px-8" style="scrollbar-width:none">
+<button type="button" role="tab" class="pd-tab shrink-0 whitespace-nowrap border-b-2 border-transparent py-4 text-base font-semibold text-ink-400" data-t="1" aria-selected="true">Ý nghĩa</button>
+<button type="button" role="tab" class="pd-tab shrink-0 whitespace-nowrap border-b-2 border-transparent py-4 text-base font-semibold text-ink-400" data-t="2" aria-selected="false">Cách đặt & đeo</button>
+<button type="button" role="tab" class="pd-tab shrink-0 whitespace-nowrap border-b-2 border-transparent py-4 text-base font-semibold text-ink-400" data-t="3" aria-selected="false">Thông số</button>
+</div>
+<div class="p-6 text-base leading-relaxed text-ink-500 sm:p-8">
+<div class="pd-panel flex max-w-[760px] flex-col gap-4" data-p="1"><p class="m-0">Tỳ hưu là linh thú thứ chín của Long vương, chỉ ăn vàng bạc châu báu mà không bài tiết – vì thế được xem là biểu tượng của chiêu tài, giữ lộc. Người làm kinh doanh, buôn bán thường thỉnh Tỳ hưu để thu hút khách và giữ tiền.</p><p class="m-0">Bạc thuộc hành Kim, tương sinh với hành Thủy, rất hợp người mệnh Kim và Thủy. Bạc còn có tính hút khí xấu – khi bạc xỉn màu là dấu hiệu vật phẩm đang hấp thụ uế khí cho chủ nhân.</p></div>
+<div class="pd-panel max-w-[760px]" data-p="2" hidden><ul class="m-0 flex list-none flex-col gap-3 p-0"><li class="flex gap-3"><span class="mt-0.5 text-copper-600" data-ic="check" data-sz="18"></span><span>Đeo mặt dây hướng đầu Tỳ hưu ra ngoài, không quay vào thân người.</span></li><li class="flex gap-3"><span class="mt-0.5 text-copper-600" data-ic="check" data-sz="18"></span><span>Tượng để bàn đặt hướng ra cửa chính hoặc cửa sổ, không đối diện gương hay giường ngủ.</span></li><li class="flex gap-3"><span class="mt-0.5 text-copper-600" data-ic="check" data-sz="18"></span><span>Không để người khác sờ vào đầu, mắt, miệng Tỳ hưu.</span></li><li class="flex gap-3"><span class="mt-0.5 text-copper-600" data-ic="check" data-sz="18"></span><span>Lau bằng khăn mềm, tránh hóa chất; bạc xỉn có thể đánh lại tại Tâm Minh miễn phí.</span></li></ul></div>
+<div class="pd-panel" data-p="3" hidden><dl class="m-0 grid max-w-[560px] grid-cols-[auto_1fr] gap-x-8 gap-y-3"><dt class="text-ink-300">Chất liệu</dt><dd class="m-0 font-medium text-ink-600">Bạc S925 nguyên khối</dd><dt class="text-ink-300">Trọng lượng</dt><dd class="m-0 font-medium text-ink-600">8 – 42 gram tùy kích thước</dd><dt class="text-ink-300">Xuất xứ</dt><dd class="m-0 font-medium text-ink-600">Chế tác thủ công tại Hà Nội</dd><dt class="text-ink-300">Đi kèm</dt><dd class="m-0 font-medium text-ink-600">Hộp gỗ, giấy kiểm định, dây da</dd></dl></div>
+</div></section>
+<section id="pd-reviews" class="mt-6 scroll-mt-24 rounded-2xl border border-cream-300 bg-white p-6 shadow-soft-sm sm:p-8">
+<div class="flex flex-wrap items-end justify-between gap-2"><h2 class="m-0 font-serif text-2xl font-semibold text-ink-600">Đánh giá từ khách hàng</h2><span class="text-sm text-ink-300">4.9/5 · 86 đánh giá</span></div>
+<div class="mt-5 grid gap-4 md:grid-cols-2">
+<figure class="m-0 flex flex-col gap-3 rounded-xl border border-cream-300 bg-cream-50 p-6"><div class="flex gap-0.5 text-copper-400"><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span></div><blockquote class="m-0 flex-1 text-base leading-relaxed text-ink-500">Bạc đúc sắc nét, có giấy kiểm định đầy đủ. Đeo được 2 tháng, việc buôn bán ổn định hơn hẳn.</blockquote><figcaption class="text-sm"><span class="font-semibold text-ink-600">Anh Hoàng Long</span><span class="text-ink-300"> · Mệnh Kim</span></figcaption></figure><figure class="m-0 flex flex-col gap-3 rounded-xl border border-cream-300 bg-cream-50 p-6"><div class="flex gap-0.5 text-copper-400"><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span><span data-ic="star" data-sz="16"></span></div><blockquote class="m-0 flex-1 text-base leading-relaxed text-ink-500">Được tư vấn kỹ qua Zalo trước khi mua, hộp quà đẹp, khắc tên rất tinh tế.</blockquote><figcaption class="text-sm"><span class="font-semibold text-ink-600">Chị Mai Anh</span><span class="text-ink-300"> · Mệnh Thủy</span></figcaption></figure>
+</div></section>
+<section class="mt-12"><div class="mb-5 flex flex-wrap items-end justify-between gap-3"><h2 class="m-0 font-serif text-2xl font-semibold text-ink-600 sm:text-3xl">Vật phẩm liên quan</h2><a href="Vật phẩm phong thủy.html" class="text-sm font-semibold text-copper-600 hover:text-copper-700">Xem tất cả →</a></div><div class="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4"><a href="Chi tiết sản phẩm.html" class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-cream-300 bg-white shadow-soft-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-md"><image-slot id="pd-rel-0" placeholder="Ảnh Thiềm thừ ngọc bích" class="pointer-events-none block aspect-square w-full"></image-slot><div class="flex flex-1 flex-col gap-1 p-4"><span class="text-sm text-ink-400">Mộc · Hỏa</span><h3 class="m-0 font-serif text-lg font-semibold leading-snug text-ink-600 group-hover:text-copper-700">Thiềm thừ ngọc bích</h3><span class="mt-auto pt-1 text-lg font-semibold text-copper-600">1.850.000đ</span></div></a><a href="Chi tiết sản phẩm.html" class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-cream-300 bg-white shadow-soft-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-md"><image-slot id="pd-rel-1" placeholder="Ảnh Vòng thạch anh trắng" class="pointer-events-none block aspect-square w-full"></image-slot><div class="flex flex-1 flex-col gap-1 p-4"><span class="text-sm text-ink-400">Kim · Thủy</span><h3 class="m-0 font-serif text-lg font-semibold leading-snug text-ink-600 group-hover:text-copper-700">Vòng thạch anh trắng</h3><span class="mt-auto pt-1 text-lg font-semibold text-copper-600">690.000đ</span></div></a><a href="Chi tiết sản phẩm.html" class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-cream-300 bg-white shadow-soft-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-md"><image-slot id="pd-rel-2" placeholder="Ảnh Cây thạch anh vàng" class="pointer-events-none block aspect-square w-full"></image-slot><div class="flex flex-1 flex-col gap-1 p-4"><span class="text-sm text-ink-400">Kim · Thổ</span><h3 class="m-0 font-serif text-lg font-semibold leading-snug text-ink-600 group-hover:text-copper-700">Cây thạch anh vàng</h3><span class="mt-auto pt-1 text-lg font-semibold text-copper-600">1.150.000đ</span></div></a><a href="Chi tiết sản phẩm.html" class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-cream-300 bg-white shadow-soft-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-md"><image-slot id="pd-rel-3" placeholder="Ảnh Long quy đồng" class="pointer-events-none block aspect-square w-full"></image-slot><div class="flex flex-1 flex-col gap-1 p-4"><span class="text-sm text-ink-400">Thủy · Mộc</span><h3 class="m-0 font-serif text-lg font-semibold leading-snug text-ink-600 group-hover:text-copper-700">Long quy đồng</h3><span class="mt-auto pt-1 text-lg font-semibold text-copper-600">1.690.000đ</span></div></a></div></section>
+</div>
+<div class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-3 border-t border-cream-300 bg-white/95 px-4 py-3 backdrop-blur sm:hidden"><button type="button" class="pd-add2 tm-btn tm-btn-outline h-12 !text-base">Thêm vào giỏ</button><button type="button" data-toast="Chuyển tới trang thanh toán…" class="tm-btn tm-btn-copper h-12 !text-base">Mua ngay</button></div>
+<section class="border-t border-cream-300 bg-white py-6 lg:py-8">
+      <div id="grid-trust" class="mx-auto grid max-w-content grid-cols-1 gap-4 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:gap-6" data-stagger></div>
+    </section>
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="relative bg-navy-500 pt-12 text-white/[0.78] lg:pt-16">
+    <div class="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-copper-400 to-transparent opacity-60"></div>
+    <div class="tm-container">
+      <div class="grid gap-8 pb-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1.4fr] lg:gap-10 lg:pb-14">
+        <!-- Brand -->
+        <div class="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
+          <div class="flex items-center gap-3.5">
+            <img src="assets/logo-mark.svg" alt="Tâm Minh" class="h-11 w-11 lg:h-[52px] lg:w-[52px]" style="filter:brightness(0) invert(1) sepia(.5) saturate(4) hue-rotate(2deg);opacity:.95"/>
+            <div><div class="font-serif text-xl font-semibold leading-tight text-white lg:text-2xl">Tâm Minh</div><div class="mt-1 text-xs tracking-wide text-copper-400">Hiểu mình - Biết vận - An tâm sống</div></div>
+          </div>
+          <p class="m-0 text-sm leading-relaxed text-white/65">Nền tảng xem tướng số, chỉ tay và phong thủy sử dụng công nghệ phân tích khuôn mặt kết hợp với tri thức nhân tướng học phương Đông</p>
+          <div class="mt-1.5 flex flex-col gap-2.5">
+            <div class="flex items-center gap-3 text-sm text-white/[0.78]"><span class="text-copper-400" data-ic="phone" data-sz="16"></span> 0888-11-2626</div>
+            <div class="flex items-center gap-3 text-sm text-white/[0.78]"><span class="text-copper-400" data-ic="mail" data-sz="16"></span> contact@tamminh.vn</div>
+            <div class="flex items-center gap-3 text-sm text-white/[0.78]"><span class="text-copper-400" data-ic="pin" data-sz="16"></span> Số 26A ngõ 22 Thạch Bàn, Long Biên, Hà Nội</div>
+          </div>
+        </div>
+        <div id="footer-cols" class="contents"></div>
+        <!-- Newsletter -->
+        <div class="flex flex-col sm:col-span-2 lg:col-span-1">
+          <div class="mb-[18px] font-sans text-xs font-bold uppercase tracking-[0.14em] text-copper-400">Bản tin Tâm Minh</div>
+          <p class="m-0 mb-4 text-sm leading-relaxed text-white/65">Mỗi tháng một bài luận sâu về tướng số, tử vi và phong thủy - thẳng đến hộp thư của bạn.</p>
+          <form id="news-form" class="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] p-1.5 pl-2 transition-colors focus-within:border-copper-400">
+            <input id="news-email" type="email" required placeholder="email@cua.ban" class="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm text-white outline-none placeholder:text-white/45"/>
+            <button type="submit" aria-label="Đăng ký" class="tm-btn tm-btn-copper h-[40px] w-[40px] flex-shrink-0 rounded-full p-0"><span data-ic="arrow" data-sz="18"></span></button>
+          </form>
+          <div id="news-note" class="mt-2.5 min-h-[1.5em] text-xs leading-relaxed text-white/50">Không spam. Hủy đăng ký bất cứ lúc nào.</div>
+          <div class="mt-5 flex gap-2.5">
+            <a href="#" aria-label="Facebook" class="tm-social-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.93v-7.03H7.9v-2.9h2.54V9.84c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.57v1.88h2.77l-.44 2.9h-2.33V22c4.78-.75 8.44-4.91 8.44-9.94z"/></svg></a>
+            <a href="#" aria-label="YouTube" class="tm-social-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 00-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 00.5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 002.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 002.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a>
+            <a href="#" aria-label="TikTok" class="tm-social-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 6.7a5.4 5.4 0 01-3.2-1.2 5.5 5.5 0 01-1.9-3H11v12c0 1.5-1.2 2.7-2.7 2.7-1.5 0-2.7-1.2-2.7-2.7s1.2-2.7 2.7-2.7c.3 0 .6 0 .9.1V8.4a6 6 0 00-.9-.1c-3.1 0-5.6 2.5-5.6 5.6 0 3.1 2.5 5.6 5.6 5.6 3.1 0 5.6-2.5 5.6-5.6V9.4a8.4 8.4 0 005.7 1.9V8.4c-.2 0-.5 0-.7 0z"/></svg></a>
+            <a href="#" aria-label="Zalo" class="tm-social-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.5 1.4 4.7 3.7 6.2L5 21l3.8-1.6c1 .3 2.1.5 3.2.5 5.5 0 10-3.6 10-8s-4.5-8.9-10-8.9z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col items-start justify-between gap-3 border-t border-white/10 py-5 sm:flex-row sm:items-center">
+        <div class="text-xs leading-relaxed text-white/55">© 2026 Tâm Minh JSC. <span class="mx-1.5 text-white/30">·</span> MST 0108234567 <span class="mx-1.5 text-white/30">·</span> Đã đăng ký với Bộ Công Thương</div>
+        <div class="flex flex-wrap gap-x-5 gap-y-2.5">
+          <a href="#" class="text-xs text-white/60 transition-colors hover:text-copper-400">Điều khoản</a>
+          <a href="#" class="text-xs text-white/60 transition-colors hover:text-copper-400">Bảo mật</a>
+          <a href="#" class="text-xs text-white/60 transition-colors hover:text-copper-400">Cookie</a>
+          <a href="#" class="text-xs text-white/60 transition-colors hover:text-copper-400">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast" class="pointer-events-none fixed bottom-8 left-1/2 z-[100] flex -translate-x-1/2 translate-y-3 items-center gap-2 rounded-full bg-navy-500 px-5 py-3 text-sm text-white opacity-0 shadow-soft-lg transition-all duration-300">
+    <span class="text-copper-400" data-ic="sparkle" data-sz="16"></span><span id="toast-msg"></span>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal-scrim" class="fixed inset-0 z-[200] hidden items-center justify-center bg-ink-600/45 p-4">
+    <div id="modal" class="w-full max-w-[520px] overflow-hidden rounded-2xl bg-white shadow-soft-lg">
+      <div class="flex items-center gap-3.5 border-b border-cream-300 px-6 py-4">
+        <div id="modal-glyph" class="flex h-12 w-12 items-center justify-center rounded-md bg-navy-500 font-serif text-xl font-semibold text-copper-400"></div>
+        <div class="flex-1"><div id="modal-name" class="font-sans text-base font-semibold text-ink-600"></div><div id="modal-role" class="text-xs text-ink-300"></div></div>
+        <button id="modal-close" class="text-ink-300 transition-colors hover:text-ink-600"><span data-ic="check" data-sz="18"></span></button>
+      </div>
+      <div class="px-6 py-6">
+        <p id="modal-body" class="m-0 mb-4 text-sm leading-relaxed text-ink-500"></p>
+        <input id="modal-input" placeholder="Viết câu hỏi của bạn…" class="w-full rounded-md border border-cream-300 px-3.5 py-3 text-sm text-ink-600 outline-none transition focus:border-copper-400 focus:ring-[3px] focus:ring-copper-400/20"/>
+        <div class="mt-4 flex justify-end">
+          <button id="modal-send" class="inline-flex items-center gap-2 rounded-md bg-copper-400 px-5 py-3 font-sans text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-copper-500">Gửi <span data-ic="send" data-sz="14"></span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="src/app-tailwind.js"></script>
+
+  <script>
+(function(){var links=[].slice.call(document.querySelectorAll('#rs-toc a'));var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+function upd(){var y=window.scrollY+140,cur=0;secs.forEach(function(s,i){if(s&&s.offsetTop<=y)cur=i});links.forEach(function(a,i){a.classList.toggle('active',i===cur)})}
+window.addEventListener('scroll',upd,{passive:true});upd();})();
+</script>
+  <template id="__bundler_thumbnail" data-bg-color="#FAF6EC">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#FAF6EC"/>
+      <circle cx="600" cy="360" r="190" fill="none" stroke="#C89544" stroke-width="6"/>
+      <circle cx="600" cy="360" r="120" fill="none" stroke="#15325E" stroke-width="5"/>
+      <circle cx="600" cy="360" r="14" fill="#C89544"/>
+      <line x1="600" y1="170" x2="600" y2="550" stroke="#C89544" stroke-width="4" stroke-dasharray="10 12" opacity="0.55"/>
+      <line x1="410" y1="360" x2="790" y2="360" stroke="#C89544" stroke-width="4" stroke-dasharray="10 12" opacity="0.55"/>
+      <text x="600" y="660" text-anchor="middle" font-family="Georgia, serif" font-size="78" font-weight="600" fill="#1A1814">Tâm Minh</text>
+    </svg>
+  </template>
+<script>
+(function(){var $=function(s){return document.querySelector(s)},$$=function(s){return [].slice.call(document.querySelectorAll(s))},q=1,price=1290000;
+function fmt(v){return v.toLocaleString('vi-VN')+'đ'}
+var OLD={1290000:1590000,1890000:2290000,2990000:3590000};function upd(){$('#pd-qty').textContent=q;$('#pd-price').textContent=fmt(price);$('#pd-old').textContent=fmt(OLD[price]);var s=$('#pd-sub');s.classList.toggle('hidden',q<2);s.lastChild.textContent=fmt(price*q)+' ('+q+' sản phẩm)'}
+$('#pd-minus').onclick=function(){if(q>1){q--;upd()}};$('#pd-plus').onclick=function(){if(q<14){q++;upd()}};
+$$('.pd-opt').forEach(function(b){b.onclick=function(){$$('.pd-opt[data-g="'+b.dataset.g+'"]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});if(b.dataset.g==='size'){price=+b.dataset.v;upd()}}});
+$$('.pd-th').forEach(function(b){b.onclick=function(){$$('.pd-th').forEach(function(x){x.setAttribute('aria-current',x===b)});$$('.pd-main').forEach(function(m,i){m.classList.toggle('hidden',i+1!=b.dataset.i);m.classList.toggle('block',i+1==b.dataset.i)})}});
+$$('.pd-tab').forEach(function(b){b.onclick=function(){$$('.pd-tab').forEach(function(x){x.setAttribute('aria-selected',x===b)});$$('.pd-panel').forEach(function(p){p.hidden=p.dataset.p!==b.dataset.t})}});
+function add(){var s=$('.pd-opt[data-g="size"][aria-pressed="true"]').textContent;var b=document.createElement('button');b.dataset.toast='Đã thêm '+q+' × Tỳ hưu bạc ('+s+') vào giỏ hàng.';b.hidden=true;document.body.appendChild(b);b.click();b.remove()}
+$('#pd-add').onclick=add;$('.pd-add2').onclick=add;
+})();
+</script>
+</body>
+</html>

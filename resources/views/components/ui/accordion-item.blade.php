@@ -12,7 +12,7 @@
     </button>
     <div class="tm-accordion-panel">
         <div>
-            <div class="px-6 pb-5 pr-12 text-sm leading-relaxed text-ink-500">{{ $slot }}</div>
+            <div class="px-6 pb-5 pr-12 text-base leading-relaxed text-ink-500">{{ $slot }}</div>
         </div>
     </div>
 </div>

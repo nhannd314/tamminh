@@ -38,9 +38,6 @@
 
 <svg viewBox="-40 -22 300 252" {{ $attributes->class('h-auto w-full max-w-[360px] shrink-0 sm:w-[340px]') }} role="img" aria-label="Biểu đồ ngũ hành: {{ $summary }}">
     <polygon points="{{ $polygon($radius) }}" fill="#FDFBF6" stroke="#E8DCC0" stroke-width="1" />
-    @foreach ([0.25, 0.5, 0.75] as $level)
-        <polygon points="{{ $polygon($radius * $level) }}" fill="none" stroke="#E8DCC0" stroke-width="1" />
-    @endforeach
 
     {{-- Ngôi sao tương khắc: nối mỗi đỉnh với đỉnh cách nó một đỉnh --}}
     <polygon points="{{ $star }}" fill="none" stroke="#DAA85A" stroke-width="1" stroke-opacity=".7" />
@@ -54,8 +51,8 @@
             [$labelX, $labelY] = $data['label'];
             $anchor = abs($labelX - $center) < 5 ? 'middle' : ($labelX > $center ? 'start' : 'end');
         @endphp
-        <text x="{{ $labelX }}" y="{{ $labelY }}" text-anchor="{{ $anchor }}" font-family="Manrope,sans-serif" font-size="13" font-weight="700" fill="{{ $data['element']->color() }}">
-            {{ $data['element']->label() }}<tspan x="{{ $labelX }}" dy="14" font-size="10.5" font-weight="500" fill="#847C70">{{ $data['value'] }}%</tspan>
+        <text x="{{ $labelX }}" y="{{ $labelY }}" text-anchor="{{ $anchor }}" font-family="Manrope,sans-serif" font-size="14" font-weight="700" fill="{{ $data['element']->color() }}">
+            {{ $data['element']->label() }}<tspan x="{{ $labelX }}" dy="15" font-size="12" font-weight="500" fill="#847C70">{{ $data['value'] }}%</tspan>
         </text>
     @endforeach
 </svg>

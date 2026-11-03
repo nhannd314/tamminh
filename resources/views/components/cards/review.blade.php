@@ -6,7 +6,7 @@
 <figure {{ $attributes->class('relative flex flex-col gap-[18px] rounded-2xl border border-cream-300 bg-white p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-copper-200 hover:shadow-soft-md') }}>
     <x-ui.stars :rating="$review['rating']" />
 
-    <blockquote class="flex-1 text-sm leading-relaxed text-ink-600">
+    <blockquote class="flex-1 text-base leading-relaxed text-ink-600">
         <span class="mr-0.5 align-[-10px] font-serif text-4xl leading-0 text-copper-300">“</span>{{ $review['quote'] }}
     </blockquote>
 

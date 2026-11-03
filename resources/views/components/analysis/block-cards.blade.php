@@ -25,7 +25,7 @@
                 @foreach ($block['items'] as $row)
                     <li class="flex gap-2">
                         <span class="w-24 shrink-0 text-sm font-semibold text-ink-600">{{ $row['label'] ?? '' }}</span>
-                        <span @class(['min-w-0 flex-1 text-sm leading-relaxed text-ink-500', 'tm-blurred' => $locked])>{{ $row['text'] }}</span>
+                        <span @class(['min-w-0 flex-1 text-[17px] text-ink-500', 'tm-blurred' => $locked])>{{ $row['text'] }}</span>
                     </li>
                 @endforeach
             </ul>

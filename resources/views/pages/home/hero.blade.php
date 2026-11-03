@@ -16,7 +16,7 @@
                 Xem tướng hiểu mình<br />tâm sinh<span class="tm-accent"> tướng mạo</span>
             </h1>
 
-            <p class="mb-7 max-w-[560px] text-[15px] leading-relaxed text-ink-500 sm:mb-8 sm:text-base">
+            <p class="mb-7 max-w-[560px] text-lg leading-relaxed text-ink-500 sm:mb-8">
                 Kế thừa tinh hoa nhân tướng học phương Đông, Tâm Minh vẽ nên tấm bản đồ chi tiết về con người bạn - phân tích cá nhân hóa, luận giải sâu sắc về vận mệnh, tài lộc và tình duyên.
             </p>
 
@@ -28,8 +28,9 @@
         </div>
 
         <x-ui.form-card title="Nhập thông tin của bạn" class="relative z-20 animate-fade-up [animation-delay:120ms]">
-            <form id="xem-tuong" method="POST" action="{{ route('analyses.store') }}" class="scroll-mt-28 space-y-4" enctype="multipart/form-data" data-submit-loading>
+            <form id="xem-tuong" method="POST" action="{{ route('analyses.store') }}" class="scroll-mt-28 space-y-4" enctype="multipart/form-data" data-submit-loading data-portrait-upload="{{ route('portraits.upload') }}">
                 @csrf
+                <input type="hidden" name="portrait_upload" value="" data-portrait-upload-id />
 
                 <x-ui.field label="Họ và tên" for="face-name" name="name">
                     <x-ui.input id="face-name" name="name" placeholder="Nhập họ và tên" autocomplete="name" required maxlength="100" />
@@ -59,7 +60,7 @@
 
                 <x-ui.field name="agree_terms">
                     <x-ui.checkbox name="agree_terms" required>
-                        <span>Tôi đồng ý với <a href="#" class="tm-link">Điều khoản dịch vụ</a> và <a href="#" class="tm-link">Chính sách bảo mật</a> của Tâm Minh</span>
+                        <span>Tôi đồng ý với <a href="{{ route('pages.show', 'dieu-khoan-dich-vu') }}" target="_blank" class="tm-link">Điều khoản dịch vụ</a> và <a href="{{ route('pages.show', 'chinh-sach-bao-mat') }}" target="_blank" class="tm-link">Chính sách bảo mật</a> của Tâm Minh</span>
                     </x-ui.checkbox>
                 </x-ui.field>
 

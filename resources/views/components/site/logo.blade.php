@@ -20,7 +20,7 @@
             'text-white' => $tone === 'dark',
         ])>Tâm Minh</span>
         <span @class([
-            'mt-1 block text-xs tracking-wide',
+            'mt-1 block text-[12px] tracking-wide',
             'hidden text-ink-300 sm:block' => $tone === 'light',
             'text-copper-400' => $tone === 'dark',
         ])>{{ $tagline }}</span>

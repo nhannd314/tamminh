@@ -1,8 +1,10 @@
 @php
     $content = $item['content'];
     $locked = ! $item['unlocked'];
+    // Đang chờ Gemini: mục nào chưa có chữ thì hiện spinner.
+    $loading = $item['loading'];
 
-    // Số đo thật từ ảnh (FaceDetector) luôn hiển thị; chưa đo được thì dùng số mẫu.
+    // Số đo thật từ ảnh (FaceDetector) luôn hiển thị; chưa đo được thì dùng số Gemini ước lượng (hoặc số mẫu khi còn khoá).
     $measured = $analysis->face_metrics;
     $lines = $measured['lines'] ?? [24, 42, 63, 82];
     $ratios = $measured['ratios'] ?? $content['ratios'];
@@ -22,7 +24,7 @@
                         'absolute right-0 -translate-y-1/2',
                         'text-base text-copper-600' => $ratio === $largest,
                         'text-sm text-ink-400' => $ratio !== $largest,
-                    ]) style="top: {{ $middle }}%">{{ $ratio }}%</span>
+                    ]) style="top: {{ $middle }}%">{{ $ratio ? "{$ratio}%" : '…' }}</span>
                 @endforeach
             </div>
 
@@ -45,14 +47,25 @@
         </div>
 
         <div class="min-w-0 flex-1">
-            <x-analysis.summary :text="$content['summary']" :locked="$locked" />
-            <div class="mt-4 flex items-center gap-3 text-sm font-semibold text-ink-600">
-                Đánh giá <x-ui.stars :rating="$content['rating']" :size="18" :class="$locked ? 'tm-blurred' : ''" />
-            </div>
+            @if ($loading && $content['summary'] === [])
+                <x-analysis.loading label="Đang đo tam đình…" />
+            @else
+                <x-analysis.summary :text="$content['summary']" :locked="$locked" />
+            @endif
+
+            @unless ($loading && $content['rating'] === 0)
+                <div class="mt-4 flex items-center gap-3 text-sm font-semibold text-ink-600">
+                    Đánh giá <x-ui.stars :rating="$content['rating']" :size="18" :class="$locked ? 'tm-blurred' : ''" />
+                </div>
+            @endunless
         </div>
     </div>
 
     <x-slot:detail>
-        <x-analysis.tabs :tabs="$content['tabs']" :locked="$locked" id="tam-dinh" />
+        @if ($loading && collect($content['tabs'])->every(fn (array $tab): bool => $tab['blocks'] === []))
+            <x-analysis.loading label="Đang viết luận giải chi tiết…" />
+        @else
+            <x-analysis.tabs :tabs="$content['tabs']" :locked="$locked" id="tam-dinh" />
+        @endif
     </x-slot:detail>
 </x-analysis.section>

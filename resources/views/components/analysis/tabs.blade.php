@@ -28,7 +28,7 @@
             <x-analysis.blocks :blocks="$tab['blocks']" :locked="$locked" />
 
             @isset($tab['conclusion'])
-                <div class="rounded-lg bg-cream-50 p-4 text-base leading-relaxed text-ink-500 sm:p-5">
+                <div class="rounded-lg bg-cream-50 p-4 text-[17px] text-ink-500 sm:p-5">
                     <div class="mb-1.5 font-semibold text-ink-600">{{ $tab['conclusion']['title'] }}</div>
                     <p @class(['tm-blurred' => $locked])>{{ $tab['conclusion']['text'] }}</p>
                 </div>

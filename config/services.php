@@ -35,10 +35,33 @@ return [
         ],
     ],
 
+    'google' => [
+        // Google Cloud Console > APIs & Services > Credentials > OAuth client ID (Web application).
+        // Authorized redirect URI phải khớp tuyệt đối: APP_URL + /dang-nhap/google/callback.
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI', '/dang-nhap/google/callback'),
+    ],
+
     'sepay' => [
+        // Tài khoản nhận tiền (đã liên kết với SePay); `bank` là mã ngân hàng theo SePay: MBBank, Vietcombank, ACB…
+        'bank' => env('SEPAY_BANK'),
+        'account_number' => env('SEPAY_ACCOUNT_NUMBER'),
+        'account_name' => env('SEPAY_ACCOUNT_NAME'),
+        // Nội dung chuyển khoản; {code} là mã đơn - phải khớp tiền tố mã thanh toán cấu hình trên SePay.
+        'transfer_content' => env('SEPAY_TRANSFER_CONTENT', '{code}'),
+        'note' => 'Vui lòng giữ nguyên nội dung chuyển khoản. Hệ thống tự động mở khóa trong vòng 1-2 phút sau khi nhận được tiền.',
         // Khoá API cấu hình ở SePay > Webhook > Chứng thực "API Key" (gửi qua header Authorization: Apikey …).
         'webhook_key' => env('SEPAY_WEBHOOK_KEY'),
         'qr_url' => 'https://qr.sepay.vn/img',
+    ],
+
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+        // Alias luôn trỏ tới bản Flash hiện hành; tên cố định (VD: gemini-2.5-flash) có thể bị Google ngừng cho tài khoản mới.
+        'model' => env('GEMINI_MODEL', 'gemini-flash-latest'),
+        'base_url' => 'https://generativelanguage.googleapis.com/v1beta',
+        'timeout' => (int) env('GEMINI_TIMEOUT', 120),
     ],
 
     'face_detector' => [

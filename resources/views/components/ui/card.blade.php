@@ -24,7 +24,7 @@
     @endif
 
     @if ($title)
-        <h3 @class(['tm-card-title', 'max-w-[80%]' => $number && $hover, 'mt-1' => $number && ! $hover])>{{ $title }}</h3>
+        <h3 @class(['tm-card-title', 'max-w-[80%]' => $number && $hover, 'mt-1 mb-2' => $number && ! $hover])>{{ $title }}</h3>
     @endif
 
     @if ($description)

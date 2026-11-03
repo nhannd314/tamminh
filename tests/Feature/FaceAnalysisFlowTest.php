@@ -1,19 +1,23 @@
 <?php
 
+use App\AnalysisOrderStatus;
 use App\AnalysisSection;
 use App\AnalysisStatus;
+use App\Jobs\GenerateAnalysisSection;
 use App\Models\FaceAnalysis;
 use App\Models\FaceAnalysisSection;
-use App\OrderStatus;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
     Storage::fake('local');
+    Queue::fake([GenerateAnalysisSection::class]);
 
     Process::fake([
         '*' => Process::result("I0000 mediapipe log\n".json_encode([
@@ -54,8 +58,12 @@ test('submitting the hero form stores the analysis and redirects to its result p
     expect($analysis->name)->toBe('Nguyễn Duy Nhân')
         ->and($analysis->birth_date->format('Y-m-d'))->toBe('1992-08-15')
         ->and($analysis->birth_time)->toBe('21:30')
-        ->and($analysis->status)->toBe(AnalysisStatus::Pending)
+        ->and($analysis->status)->toBe(AnalysisStatus::Processing)
         ->and($analysis->terms_accepted_at)->not->toBeNull();
+
+    Queue::assertPushed(GenerateAnalysisSection::class, 2);
+    Queue::assertPushed(GenerateAnalysisSection::class, fn (GenerateAnalysisSection $job): bool => $job->section === AnalysisSection::Overview);
+    Queue::assertPushed(GenerateAnalysisSection::class, fn (GenerateAnalysisSection $job): bool => $job->section === AnalysisSection::NguHanh);
 
     Storage::disk('local')->assertExists($analysis->portrait_path);
 
@@ -63,6 +71,56 @@ test('submitting the hero form stores the analysis and redirects to its result p
         ->and($analysis->face_metrics['ratios'])->toBe([23, 37, 40]);
 
     Process::assertRan(fn ($process) => str_contains(implode(' ', (array) $process->command), 'face_landmarks.py'));
+});
+
+test('an analysis belongs to the logged in customer but never to an admin session', function () {
+    $customer = User::factory()->create();
+    $this->actingAs($customer, 'customer')->post(route('analyses.store'), analysisPayload());
+
+    expect(FaceAnalysis::sole()->user_id)->toBe($customer->id);
+
+    FaceAnalysis::query()->delete();
+    $this->app['auth']->guard('customer')->logout();
+
+    $this->actingAs(User::factory()->admin()->create(), 'web')->post(route('analyses.store'), analysisPayload());
+
+    expect(FaceAnalysis::sole()->user_id)->toBeNull();
+});
+
+test('the photo is processed as soon as it is chosen and the form only sends its id', function () {
+    $upload = $this->postJson(route('portraits.upload'), ['portrait' => UploadedFile::fake()->image('portrait.jpg', 600, 800)])
+        ->assertOk()
+        ->assertJson(['face_detected' => true]);
+
+    $this->post(route('analyses.store'), analysisPayload(['portrait' => null, 'portrait_upload' => $upload->json('id')]))
+        ->assertRedirect();
+
+    $analysis = FaceAnalysis::sole();
+
+    expect($analysis->face_metrics['ratios'])->toBe([23, 37, 40])
+        ->and($analysis->face_crop_path)->toStartWith('faces/');
+    Storage::disk('local')->assertExists($analysis->portrait_path);
+    Process::assertRanTimes(fn ($process) => str_contains(implode(' ', (array) $process->command), 'face_landmarks.py'), 1);
+});
+
+test('choosing another photo discards the previous one', function () {
+    $first = $this->postJson(route('portraits.upload'), ['portrait' => UploadedFile::fake()->image('a.jpg', 600, 800)]);
+    $this->postJson(route('portraits.upload'), ['portrait' => UploadedFile::fake()->image('b.jpg', 600, 800)]);
+
+    expect(Storage::disk('local')->allFiles('portraits'))->toHaveCount(1);
+
+    $this->post(route('analyses.store'), analysisPayload(['portrait' => null, 'portrait_upload' => $first->json('id')]))
+        ->assertSessionHasErrors(['portrait' => 'Ảnh đã hết hạn, vui lòng chọn lại ảnh chân dung.']);
+});
+
+test('a chosen photo without a face is rejected right away', function () {
+    Process::fake(['*' => Process::result('{"found": false}')]);
+
+    $this->postJson(route('portraits.upload'), ['portrait' => UploadedFile::fake()->image('portrait.jpg', 600, 800)])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('portrait');
+
+    expect(Storage::disk('local')->allFiles('portraits'))->toBe([]);
 });
 
 test('a photo without a face is rejected', function () {
@@ -128,7 +186,6 @@ test('result page shows the computed chart and locks paid sections', function ()
         ->assertSeeText('Thổ Ngũ Cục')
         ->assertSeeText('Phu Thê')
         ->assertSeeText('21:30 (giờ Hợi)')
-        ->assertSeeText('Ý chí kiên cường')
         ->assertSeeText('Chưa mở khóa');
 });
 
@@ -183,9 +240,24 @@ test('result page works without a birth time', function () {
 test('unlocked sections are rendered', function () {
     $analysis = FaceAnalysis::factory()->create();
     $analysis->unlock(AnalysisSection::ThanKhiSac);
+    $analysis->saveGeneratedContent(AnalysisSection::ThanKhiSac, [
+        'tags' => [],
+        'summary' => 'Thần thái điềm tĩnh.',
+        'rating' => 4,
+        'blocks' => [['title' => 'Tổng kết', 'items' => [['text' => 'Khí sắc ổn định.']]]],
+    ], 'gemini-test');
 
     $this->get(route('analyses.show', $analysis))
-        ->assertSeeText('Thần thu lại thì trí tuệ mẫn tiệp');
+        ->assertSeeText('Thần thái điềm tĩnh.')
+        ->assertSeeText('Khí sắc ổn định.');
+});
+
+test('the chart reveal animation only plays on the first visit', function () {
+    $analysis = FaceAnalysis::factory()->create();
+
+    $this->get(route('analyses.show', $analysis))->assertSee('tm-lazy');
+    $this->get(route('analyses.show', $analysis))->assertDontSee('tm-lazy');
+    $this->get(route('analyses.show', FaceAnalysis::factory()->create()))->assertSee('tm-lazy');
 });
 
 test('unknown tokens return 404', function () {
@@ -203,14 +275,24 @@ test('unlock buttons create pending orders with the configured price', function 
     $analysis = FaceAnalysis::factory()->create();
 
     $this->post(route('analyses.unlock', $analysis), ['section' => 'tam_dinh'])
-        ->assertRedirect(route('analyses.show', $analysis).'#tam-dinh')
+        ->assertRedirect(route('analyses.show', $analysis))
         ->assertSessionHas('payment_order');
 
-    $this->post(route('analyses.unlock', $analysis))->assertRedirect();
+    $this->post(route('analyses.unlock', $analysis))->assertRedirect(route('analyses.show', $analysis));
 
     expect($analysis->orders()->count())->toBe(2)
-        ->and($analysis->orders()->first()->status)->toBe(OrderStatus::Pending)
+        ->and($analysis->orders()->first()->status)->toBe(AnalysisOrderStatus::Pending)
         ->and($analysis->orders()->first()->amount)->toBe(AnalysisSection::TamDinh->price());
+});
+
+test('unlocking from the page returns the payment popup without leaving the page', function () {
+    $analysis = FaceAnalysis::factory()->create();
+
+    $response = $this->postJson(route('analyses.unlock', $analysis), ['section' => 'tam_dinh'])->assertOk();
+
+    expect($response->json('html'))->toContain('data-modal="payment"')
+        ->toContain($analysis->orders()->sole()->code)
+        ->toContain('Phần 3 · Tam đình');
 });
 
 test('free sections cannot be ordered', function () {
