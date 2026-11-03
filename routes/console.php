@@ -9,3 +9,5 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('analyses:purge-portraits')->dailyAt('03:00')->withoutOverlapping();
+
+Schedule::command('activity:fake')->everyMinute()->withoutOverlapping();

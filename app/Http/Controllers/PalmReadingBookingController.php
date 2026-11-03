@@ -8,6 +8,7 @@ use App\Mail\PalmReadingBooked;
 use App\Models\PalmReadingBooking;
 use App\Models\User;
 use App\PalmReadingPackage;
+use App\Support\ActivityFeed;
 use App\UserRole;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
@@ -27,6 +28,8 @@ class PalmReadingBookingController extends Controller
             'phone' => $request->string('palm_phone')->toString(),
             'package' => $request->enum('palm_package', PalmReadingPackage::class),
         ]);
+
+        ActivityFeed::announce('palm', ActivityFeed::displayName($booking->name).' vừa đặt lịch xem chỉ tay');
 
         $adminEmails = User::query()->where('role', UserRole::Admin)->pluck('email');
 

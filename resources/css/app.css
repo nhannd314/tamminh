@@ -560,6 +560,7 @@
     [data-sticky-header],
     footer,
     [data-toast-root],
+    [data-activity-root],
     [data-print-hidden] {
         display: none !important;
     }
@@ -721,6 +722,12 @@ body.drawer-open [data-burger] > span:nth-child(2) {
 
 body.drawer-open [data-burger] > span:nth-child(3) {
     transform: translateY(-6.5px) rotate(-45deg);
+}
+
+/* Activity feed */
+[data-activity-root].is-visible {
+    opacity: 1;
+    translate: 0 0;
 }
 
 /* Toast */

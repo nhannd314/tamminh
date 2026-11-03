@@ -29,6 +29,7 @@
 
         <x-site.footer />
         <x-site.toast />
+        <x-site.activity-toast />
 
         @stack('modals')
     </body>

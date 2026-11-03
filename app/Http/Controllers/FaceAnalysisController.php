@@ -8,6 +8,7 @@ use App\AnalysisStatus;
 use App\Gender;
 use App\Http\Requests\StoreFaceAnalysisRequest;
 use App\Models\FaceAnalysis;
+use App\Support\ActivityFeed;
 use App\Support\AffiliateReferral;
 use App\Support\AnalysisSections;
 use App\Support\Astrology\BirthChart;
@@ -58,6 +59,8 @@ class FaceAnalysisController extends Controller
         ]);
 
         $analysis->generateContent(AnalysisSection::free(), now()->addMinutes(3));
+
+        ActivityFeed::announce('analysis', ActivityFeed::displayName($analysis->name).' vừa đăng ký xem tướng luận giải');
 
         return to_route('analyses.show', $analysis);
     }

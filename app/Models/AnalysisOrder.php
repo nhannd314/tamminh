@@ -5,6 +5,7 @@ namespace App\Models;
 use App\AffiliateCommissionStatus;
 use App\AnalysisOrderStatus;
 use App\AnalysisSection;
+use App\Support\ActivityFeed;
 use Database\Factories\AnalysisOrderFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -136,6 +137,7 @@ class AnalysisOrder extends Model
 
         // Khách thường đang mở cửa sổ thanh toán: trang tự tải lại và stream nội dung, job chỉ chạy dự phòng.
         if ($justPaid) {
+            ActivityFeed::announce('unlock', ActivityFeed::displayName($this->faceAnalysis->name).' vừa mở khoá luận giải đầy đủ');
             $this->faceAnalysis->generateContent($this->sectionsToUnlock(), now()->addMinutes(2));
         }
     }

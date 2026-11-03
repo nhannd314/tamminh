@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCartItemRequest;
 use App\Models\Product;
+use App\Support\ActivityFeed;
 use App\Support\Cart;
 use App\Support\ShopContact;
 use Illuminate\Contracts\View\View;
@@ -51,6 +52,8 @@ class CartController extends Controller
         $quantity = min($request->integer('quantity'), $product->stock);
 
         $this->cart->add($product, $quantity, $size, $style, $engraving);
+
+        ActivityFeed::announce('cart', ActivityFeed::displayName($request->user('customer')?->name)." vừa thêm “{$product->name}” vào giỏ hàng");
 
         $message = "Đã thêm {$quantity} × {$product->name}".($size ? " ({$size})" : '').' vào giỏ hàng.';
 

@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use App\OrderPaymentMethod;
+use App\Support\ActivityFeed;
 use App\Support\AffiliateReferral;
 use App\Support\Cart;
 use App\Support\CartLine;
@@ -103,6 +104,8 @@ class CheckoutController extends Controller
         }
 
         $this->cart->clear();
+
+        ActivityFeed::announce('order', ActivityFeed::displayName($order->customer_name)." vừa đặt hàng ({$lines->sum('quantity')} vật phẩm)");
 
         $adminEmails = User::query()->where('role', UserRole::Admin)->pluck('email');
 

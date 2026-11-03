@@ -5,6 +5,7 @@ namespace App\Models;
 use App\AffiliateCommissionStatus;
 use App\OrderPaymentMethod;
 use App\OrderStatus;
+use App\Support\ActivityFeed;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -162,11 +163,11 @@ class Order extends Model
      */
     public function markAsPaid(?string $transactionId = null, ?array $payload = null): void
     {
-        DB::transaction(function () use ($transactionId, $payload): void {
+        $justPaid = DB::transaction(function () use ($transactionId, $payload): bool {
             $order = static::query()->lockForUpdate()->findOrFail($this->getKey());
 
             if ($order->isPaid()) {
-                return;
+                return false;
             }
 
             $order->update([
@@ -174,9 +175,15 @@ class Order extends Model
                 'payment_payload' => $payload,
                 'paid_at' => now(),
             ]);
+
+            return true;
         });
 
         $this->refresh();
+
+        if ($justPaid) {
+            ActivityFeed::announce('paid', ActivityFeed::displayName($this->customer_name).' vừa thanh toán thành công đơn hàng');
+        }
     }
 
     /**
