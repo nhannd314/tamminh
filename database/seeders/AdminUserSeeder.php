@@ -16,8 +16,8 @@ class AdminUserSeeder extends Seeder
         $admin = User::query()->firstOrNew(['email' => 'nhannd314@gmail.com']);
 
         $admin->fill([
-            'name' => 'Quản trị viên',
-            'password' => 'MatKhau@314!',
+            'name' => 'Nguyen Duy Nhan',
+            'password' => '01051992',
         ]);
         $admin->role = UserRole::Admin;
         $admin->email_verified_at ??= now();

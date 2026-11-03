@@ -43,8 +43,9 @@ test('admin seeder creates a single admin account and can be rerun', function ()
 
     $admin = User::sole();
 
-    expect($admin->email)->toBe('nhannd314@gmail.com')
+    expect($admin->name)->toBe('Nguyen Duy Nhan')
+        ->and($admin->email)->toBe('nhannd314@gmail.com')
         ->and($admin->role)->toBe(UserRole::Admin)
-        ->and(Hash::check('MatKhau@314!', $admin->password))->toBeTrue()
+        ->and(Hash::check('01051992', $admin->password))->toBeTrue()
         ->and($admin->email_verified_at)->not->toBeNull();
 });
