@@ -15,6 +15,7 @@
     'icon' => null,
     'trailingIcon' => null,
     'iconSize' => 16,
+    'iconStroke' => 1.75,
     'block' => false,
     'pill' => false,
 ])
@@ -31,13 +32,13 @@
 
 @if ($href)
     <a href="{{ $href }}" {{ $attributes->class($classes) }}>
-        @if ($icon)<x-ui.icon :name="$icon" :size="$iconSize" />@endif
+        @if ($icon)<x-ui.icon :name="$icon" :size="$iconSize" :stroke="$iconStroke" />@endif
         {{ $slot }}
         @if ($trailingIcon)<x-ui.icon :name="$trailingIcon" :size="$iconSize" />@endif
     </a>
 @else
     <button type="{{ $type }}" {{ $attributes->class($classes) }}>
-        @if ($icon)<x-ui.icon :name="$icon" :size="$iconSize" />@endif
+        @if ($icon)<x-ui.icon :name="$icon" :size="$iconSize" :stroke="$iconStroke" />@endif
         {{ $slot }}
         @if ($trailingIcon)<x-ui.icon :name="$trailingIcon" :size="$iconSize" />@endif
     </button>

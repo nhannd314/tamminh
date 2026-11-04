@@ -6,7 +6,7 @@
             <x-site.nav-links />
         </nav>
 
-        <x-ui.button :href="auth('customer')->check() ? route('account.affiliate.show') : route('affiliate.landing')" size="sm" icon="dollar" :icon-size="15" class="ml-auto hidden sm:inline-flex lg:ml-0" title="Kiếm tiền affiliate">
+        <x-ui.button :href="auth('customer')->check() ? route('account.affiliate.show') : route('affiliate.landing')" size="sm" icon="dollar" :icon-size="15" :icon-stroke="2.5" class="ml-auto hidden sm:inline-flex lg:ml-0" title="Kiếm tiền affiliate">
             <span class="hidden xl:inline">Kiếm tiền affiliate</span>
         </x-ui.button>
 

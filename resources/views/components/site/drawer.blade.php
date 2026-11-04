@@ -13,7 +13,7 @@
     </nav>
 
     <div class="flex flex-col gap-3 border-t border-cream-300 px-6 pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-        <x-ui.button :href="auth('customer')->check() ? route('account.affiliate.show') : route('affiliate.landing')" size="sm" icon="dollar" :icon-size="15" class="w-max">Kiếm tiền affiliate</x-ui.button>
+        <x-ui.button :href="auth('customer')->check() ? route('account.affiliate.show') : route('affiliate.landing')" size="sm" icon="dollar" :icon-size="15" :icon-stroke="2.5" class="w-max">Kiếm tiền affiliate</x-ui.button>
         @auth('customer')
             <x-ui.button :href="route('account.show')" variant="secondary" class="gap-2.5 tracking-wide">
                 <x-ui.icon name="user" :size="18" class="text-copper-400" /> Tài khoản của tôi
