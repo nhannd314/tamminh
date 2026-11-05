@@ -487,7 +487,7 @@
 
     /* Chữ mẫu bị che mờ trong phần chưa mở khoá - không bao giờ là nội dung thật */
     .tm-blurred {
-        @apply pointer-events-none blur-[5px] select-none;
+        @apply pointer-events-none blur-[3px] select-none;
     }
 
     /* ── Nội dung bài viết / trang tĩnh (HTML từ RichEditor) ── */

@@ -2,11 +2,14 @@
     Các tab luận giải chi tiết (Thượng/Trung/Hạ đình, 5 giác quan…), mỗi tab gồm các khối
     luận giải và một đoạn "Tổng kết" tuỳ chọn. Chuyển tab bằng JS (data-tabs).
 
-    Usage: <x-analysis.tabs :tabs="$content['tabs']" :locked="$locked" id="tam-dinh" />
+    `intros` (tuỳ chọn): đoạn mô tả ngắn hiển thị đầu mỗi tab, theo thứ tự tab.
+
+    Usage: <x-analysis.tabs :tabs="$content['tabs']" :locked="$locked" :intros="[...]" id="tam-dinh" />
 --}}
 @props([
     'tabs' => [],
     'locked' => false,
+    'intros' => [],
     'id',
 ])
 
@@ -25,6 +28,10 @@
     @foreach ($tabs as $tab)
         <div role="tabpanel" id="{{ $id }}-panel-{{ $loop->index }}" aria-labelledby="{{ $id }}-tab-{{ $loop->index }}" data-tab-panel="{{ $loop->index }}"
             class="flex max-w-[860px] flex-col gap-6" @unless ($loop->first) hidden @endunless>
+            @if (! empty($intros[$loop->index]))
+                <p class="text-[17px] text-ink-500">{{ $intros[$loop->index] }}</p>
+            @endif
+
             <x-analysis.blocks :blocks="$tab['blocks']" :locked="$locked" />
 
             @isset($tab['conclusion'])
