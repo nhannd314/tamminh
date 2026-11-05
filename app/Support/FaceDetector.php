@@ -18,7 +18,7 @@ class FaceDetector
      * Đo khuôn mặt trong ảnh `$portraitPath` (disk local) và lưu ảnh cắt vào thư mục faces/.
      * Trả về null khi không thấy khuôn mặt.
      *
-     * @return array{crop_path: string, box: list<float>, lines: list<float>, ratios: list<int>}|null
+     * @return array{crop_path: string, box: list<float>, lines: list<float>, ratios: list<int>, features: array<string, list<float>>}|null
      *
      * @throws RuntimeException khi không chạy được script (thiếu Python, thiếu thư viện…).
      */
@@ -51,6 +51,7 @@ class FaceDetector
             'box' => $output['box'],
             'lines' => $output['lines'],
             'ratios' => $output['ratios'],
+            'features' => $output['features'] ?? [],
         ];
     }
 

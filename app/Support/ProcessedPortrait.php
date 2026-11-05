@@ -20,7 +20,7 @@ final readonly class ProcessedPortrait
     private const SESSION_KEY = 'portrait_upload';
 
     /**
-     * @param  array{box: list<float>, lines: list<float>, ratios: list<int>}|null  $faceMetrics
+     * @param  array{box: list<float>, lines: list<float>, ratios: list<int>, features?: array<string, list<float>>}|null  $faceMetrics
      */
     public function __construct(
         public string $id,

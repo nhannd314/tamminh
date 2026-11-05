@@ -3,6 +3,7 @@
     luận giải và một đoạn "Tổng kết" tuỳ chọn. Chuyển tab bằng JS (data-tabs).
 
     `intros` (tuỳ chọn): đoạn mô tả ngắn hiển thị đầu mỗi tab, theo thứ tự tab.
+    `crops` (tuỳ chọn, cần `analysis`): vùng ảnh cắt của từng tab (xem x-analysis.feature-crop), hiện bên trái đoạn mô tả.
 
     Usage: <x-analysis.tabs :tabs="$content['tabs']" :locked="$locked" :intros="[...]" id="tam-dinh" />
 --}}
@@ -10,6 +11,8 @@
     'tabs' => [],
     'locked' => false,
     'intros' => [],
+    'analysis' => null,
+    'crops' => [],
     'id',
 ])
 
@@ -29,7 +32,14 @@
         <div role="tabpanel" id="{{ $id }}-panel-{{ $loop->index }}" aria-labelledby="{{ $id }}-tab-{{ $loop->index }}" data-tab-panel="{{ $loop->index }}"
             class="flex max-w-[860px] flex-col gap-6" @unless ($loop->first) hidden @endunless>
             @if (! empty($intros[$loop->index]))
-                <p class="text-[17px] text-ink-500">{{ $intros[$loop->index] }}</p>
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
+                    @if ($analysis && ! empty($crops[$loop->index]) && $analysis->face_crop_path)
+                        <x-analysis.feature-crop :analysis="$analysis" :box="$crops[$loop->index]" :label="$tab['title']"
+                            class="w-full max-w-64 self-center sm:w-56 sm:self-start" />
+                    @endif
+
+                    <p class="min-w-0 flex-1 text-[17px] text-ink-500">{{ $intros[$loop->index] }}</p>
+                </div>
             @endif
 
             <x-analysis.blocks :blocks="$tab['blocks']" :locked="$locked" />

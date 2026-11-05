@@ -8,7 +8,9 @@ In ra một dòng JSON:
   {"found": true,
    "box": [x, y, w, h],                    # vùng cắt, % theo ảnh gốc
    "lines": [chân tóc, chân mày, chân mũi, cằm],  # % theo chiều cao ảnh cắt
-   "ratios": [thượng, trung, hạ]}          # % mỗi đình, tổng = 100
+   "ratios": [thượng, trung, hạ],          # % mỗi đình, tổng = 100
+   "features": {"long_may": [x, y, w, h], "mat": …, "tai": …, "mui": …, "mieng": …}}
+                                           # vùng từng ngũ quan: [x, y, w, h] % theo ảnh cắt + tỉ lệ rộng/cao
 
 Bốn đường chia mặt:
   - Chân tóc: quét từ đỉnh lưới mặt (điểm 10) lên trên tới khi hết màu da trán.
@@ -30,6 +32,18 @@ BROWS = [105, 66, 334, 296]
 NOSE_BASE = 2
 CHIN = 152
 FACE_SIDES = [234, 454]
+
+# Các điểm lưới mặt bao quanh từng ngũ quan (tai không có trong lưới nên suy ra từ mép mặt).
+FEATURE_POINTS = {
+    "long_may": [70, 63, 105, 66, 107, 46, 53, 52, 65, 55, 300, 293, 334, 296, 336, 276, 283, 282, 295, 285],
+    "mat": [33, 246, 161, 160, 159, 158, 157, 173, 133, 155, 154, 153, 145, 144, 163, 7,
+            362, 398, 384, 385, 386, 387, 388, 466, 263, 249, 390, 373, 374, 380, 381, 382],
+    "mui": [168, 6, 197, 195, 5, 4, 1, 2, 98, 327, 129, 358, 102, 331, 64, 294],
+    "mieng": [61, 291, 0, 17, 13, 14, 37, 267, 84, 314, 185, 409, 146, 375, 40, 270, 91, 321],
+}
+# Tỉ lệ rộng/cao của khung cắt từng bộ phận (lông mày và mắt là dải ngang, tai là dải đứng).
+FEATURE_ASPECTS = {"long_may": 2.2, "mat": 2.2, "tai": 0.75, "mui": 1.1, "mieng": 1.6}
+FEATURE_PADDING = 0.18
 
 
 def read_image(path):
@@ -64,6 +78,36 @@ def find_hairline(image, landmarks, height, width):
             misses = 0
 
     return float(top_y)
+
+
+def feature_box(points, aspect, crop_left, crop_top, crop_width, crop_height, min_width):
+    """Hộp bao các điểm, nới lề và ép về tỉ lệ `aspect`, đổi sang % theo ảnh cắt (kèm tỉ lệ ở cuối)."""
+    xs = [x for x, _ in points]
+    ys = [y for _, y in points]
+    box_width = max(max(xs) - min(xs), min_width) * (1 + FEATURE_PADDING * 2)
+    box_height = (max(ys) - min(ys)) * (1 + FEATURE_PADDING * 2)
+    box_width = max(box_width, box_height * aspect)
+    box_height = box_width / aspect
+
+    if box_width > crop_width:
+        box_width = crop_width
+        box_height = box_width / aspect
+    if box_height > crop_height:
+        box_height = crop_height
+        box_width = box_height * aspect
+
+    center_x = (max(xs) + min(xs)) / 2
+    center_y = (max(ys) + min(ys)) / 2
+    left = float(np.clip(center_x - box_width / 2, crop_left, crop_left + crop_width - box_width))
+    top = float(np.clip(center_y - box_height / 2, crop_top, crop_top + crop_height - box_height))
+
+    return [
+        round((left - crop_left) / crop_width * 100, 2),
+        round((top - crop_top) / crop_height * 100, 2),
+        round(box_width / crop_width * 100, 2),
+        round(box_height / crop_height * 100, 2),
+        aspect,
+    ]
 
 
 def main():
@@ -116,11 +160,23 @@ def main():
     ratios = [round(part / total * 100) for part in parts]
     ratios[1] = 100 - ratios[0] - ratios[2]
 
+    face_w = landmarks[FACE_SIDES[1]][0] - landmarks[FACE_SIDES[0]][0]
+    crop_w = right - left
+    features = {}
+    for name, indexes in FEATURE_POINTS.items():
+        features[name] = feature_box([landmarks[i] for i in indexes], FEATURE_ASPECTS[name], left, top, crop_w, crop_h, face_w * 0.3)
+
+    # Tai: lưới mặt dừng ở mép trước tai, nên lấy dải ngay bên ngoài điểm 234 (tai bên trái ảnh), cao từ chân mày tới chân mũi.
+    ear_x = landmarks[FACE_SIDES[0]][0]
+    ear_points = [(ear_x - face_w * 0.22, brow), (ear_x - face_w * 0.02, nose)]
+    features["tai"] = feature_box(ear_points, FEATURE_ASPECTS["tai"], left, top, crop_w, crop_h, face_w * 0.18)
+
     print(json.dumps({
         "found": True,
         "box": [round(left / width * 100, 2), round(top / height * 100, 2), round((right - left) / width * 100, 2), round(crop_h / height * 100, 2)],
         "lines": lines,
         "ratios": ratios,
+        "features": {name: features[name] for name in ("long_may", "mat", "tai", "mui", "mieng")},
     }))
 
 

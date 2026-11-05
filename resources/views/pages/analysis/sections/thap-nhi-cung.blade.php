@@ -39,7 +39,7 @@
             <x-analysis.loading label="Đang luận giải từng cung…" />
         @endif
 
-        <div class="grid grid-cols-1 items-start gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div class="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
             @foreach ($palaces as $palace)
                 <details class="group flex min-w-0 flex-col rounded-lg border border-cream-300 bg-cream-50 p-4 open:col-span-full open:bg-white open:shadow-soft-sm">
                     <summary class="flex cursor-pointer list-none flex-col gap-1.5 [&::-webkit-details-marker]:hidden">

@@ -11,6 +11,11 @@
         'Mũi (Thẩm biện quan, ứng với Thổ tinh) nằm ở trung tâm khuôn mặt, quản lý tài lộc (Tài bạch cung), khả năng tự chủ và lòng tự trọng; nó phản ánh cách một người kiếm tiền, giữ tiền và giá trị bản thân. Sống mũi thẳng, cao vừa phải, chóp mũi đầy đặn, cánh mũi nảy nở nhưng không hếch là tướng có năng lực quản lý tài chính tốt, trung thực và sự nghiệp vững vàng ở trung vận. Sống mũi gồ ghề, gãy khúc, lệch hoặc cánh mũi mỏng, hếch lộ lỗ mũi thường báo hiệu tài vận bất ổn, kiếm bao nhiêu tiêu hết bấy nhiêu, khó tích lũy.',
         'Miệng (Xuất nạp quan, ứng với Thủy tinh) tượng trưng cho khả năng ăn nói, lộc ăn uống, phúc lộc tuổi già và quan hệ con cái (Tử tức cung); đây là cửa ngõ thu nạp thức ăn và phát ra ngôn từ. Miệng rộng, môi đầy hồng hào, khóe miệng hướng lên, răng đều trắng là dấu hiệu giao tiếp khéo léo, hậu vận an nhàn và con cháu hiếu thuận. Môi quá mỏng, khóe miệng trĩu xuống, miệng quá nhỏ hoặc răng lộn xộn thường báo hiệu hay thị phi, lời nói thiếu sức nặng, đường con cái hoặc hậu vận cô đơn.',
     ];
+
+    // Vùng ảnh cắt từng bộ phận (MediaPipe) theo thứ tự tab; phân tích cũ chưa đo thì không có ảnh.
+    $featureCrops = collect(['long_may', 'mat', 'tai', 'mui', 'mieng'])
+        ->map(fn (string $feature): ?array => $analysis->face_metrics['features'][$feature] ?? null)
+        ->all();
 @endphp
 
 <x-analysis.section :analysis="$analysis" :item="$item">
@@ -20,16 +25,11 @@
         <x-analysis.summary :text="$content['summary']" :locked="$locked" />
     @endif
 
-    <div class="mt-4 flex max-w-[860px] flex-col gap-3 text-[17px] text-ink-500">
-        <p><b class="font-semibold text-copper-700">Nguyên lý phối hợp ngũ quan:</b> một quan dù đẹp đến đâu mà xung khắc với các quan khác thì cũng giảm đi cát khí. Mắt sáng cần lông mày thanh che chở; mũi tài lộc cần miệng và tai làm hậu thuẫn cân đối.</p>
-        <p>Lý tưởng nhất là "ngũ quan triều cống": các quan đều hướng vào trung tâm — mắt nhìn thẳng tinh anh, mũi ngay ngắn, miệng khép chặt, tai áp sát đầu, lông mày ôm lấy mắt. Đó là dấu hiệu nội tâm quy tụ, tinh thần vững vàng, tâm trí không phân tán nên làm việc gì cũng dễ thành đại sự.</p>
-    </div>
-
     <x-slot:detail>
         @if ($loading && collect($content['tabs'])->every(fn (array $tab): bool => $tab['blocks'] === []))
             <x-analysis.loading label="Đang viết luận giải chi tiết…" />
         @else
-            <x-analysis.tabs :tabs="$content['tabs']" :locked="$locked" :intros="$featureIntros" id="ngu-quan" />
+            <x-analysis.tabs :tabs="$content['tabs']" :locked="$locked" :intros="$featureIntros" :analysis="$analysis" :crops="$featureCrops" id="ngu-quan" />
         @endif
     </x-slot:detail>
 </x-analysis.section>

@@ -25,6 +25,7 @@ beforeEach(function () {
             'box' => [30.5, 10.5, 26.5, 27.1],
             'lines' => [13.2, 30.4, 57.6, 87.5],
             'ratios' => [23, 37, 40],
+            'features' => ['mat' => [20.0, 30.0, 60.0, 27.3, 2.2]],
         ])),
     ]);
 });
@@ -68,7 +69,8 @@ test('submitting the hero form stores the analysis and redirects to its result p
     Storage::disk('local')->assertExists($analysis->portrait_path);
 
     expect($analysis->face_crop_path)->toStartWith('faces/')
-        ->and($analysis->face_metrics['ratios'])->toBe([23, 37, 40]);
+        ->and($analysis->face_metrics['ratios'])->toBe([23, 37, 40])
+        ->and($analysis->face_metrics['features']['mat'])->toEqual([20, 30, 60, 27.3, 2.2]);
 
     Process::assertRan(fn ($process) => str_contains(implode(' ', (array) $process->command), 'face_landmarks.py'));
 });
@@ -152,6 +154,21 @@ test('measured tam dinh ratios are shown even while the section is locked', func
         ->assertSee('style="top: 20%">22%</span>', false)
         ->assertSee('style="top: 45%">41%</span>', false)
         ->assertSee(route('analyses.face', $analysis), false);
+});
+
+test('ngu quan tabs show the cropped feature image next to the description', function () {
+    $analysis = FaceAnalysis::factory()->create([
+        'face_crop_path' => 'faces/a.jpg',
+        'face_metrics' => [
+            'box' => [0, 0, 100, 100], 'lines' => [10, 30, 60, 90], 'ratios' => [22, 41, 37],
+            'features' => ['mat' => [20, 30, 60, 27.3, 2.2]],
+        ],
+    ]);
+
+    $this->get(route('analyses.show', $analysis))
+        ->assertSee('aria-label="Mắt của '.e($analysis->name).'"', false)
+        ->assertSee('aspect-ratio: 2.2; background-image: url('.route('analyses.face', $analysis).')', false)
+        ->assertDontSee('aria-label="Mũi của', false);
 });
 
 test('birth time is optional', function () {
